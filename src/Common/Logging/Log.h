@@ -47,7 +47,7 @@ void LogContext::Info(const std::string& tag, const std::string& formatString, c
 		logger = spdlog::stdout_color_mt(tag);
 	}
 	logger->info(formatString, args...);
-
+	
 	for (auto& handler : handlers)
 	{
 		handler->Info(fmt::format(formatString, args...));
@@ -64,7 +64,7 @@ void LogContext::Debug(const std::string& tag, const std::string& formatString, 
 		logger = spdlog::stdout_color_mt(tag);
 	}
 	logger->debug(formatString, args...);
-
+	
 	for (auto& handler : handlers)
 	{
 		handler->Debug(fmt::format(formatString, args...));
@@ -80,7 +80,7 @@ void LogContext::Warn(const std::string& tag, const std::string& formatString, c
 		logger = spdlog::stdout_color_mt(tag);
 	}
 	logger->warn(formatString, args...);
-
+	
 	for (auto& handler : handlers)
 	{
 		handler->Warn(fmt::format(formatString, args...));
@@ -97,7 +97,7 @@ void LogContext::Error(const std::string& tag, const std::string& formatString, 
 	}
 	logger->error(formatString, args...);
 	logger->dump_backtrace();
-
+	
 	for (auto& handler : handlers)
 	{
 		handler->Error(fmt::format(formatString, args...));

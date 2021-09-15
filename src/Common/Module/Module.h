@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "ResetCore_CommonLib_API.h"
+#include "Platform/Platform.h"
 
 namespace CommonLib
 {

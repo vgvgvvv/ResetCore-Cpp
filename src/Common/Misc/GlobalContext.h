@@ -2,10 +2,9 @@
 #include <map>
 #include <string>
 
-
+#include "Common.h"
 #include "Singleton.h"
 #include "ResetCore_CommonLib_API.h"
-#include "Logging/Log.h"
 
 class ResetCore_CommonLib_API GlobalContext
 {
@@ -31,7 +30,7 @@ private:
 	std::map<std::string, bool> boolMap;
 };
 
-class CommonLib_API StaticGlobalContextValue
+class ResetCore_CommonLib_API StaticGlobalContextValue
 {
 public:
 

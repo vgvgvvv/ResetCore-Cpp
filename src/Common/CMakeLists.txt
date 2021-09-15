@@ -5,12 +5,12 @@ set(TargetName ResetCore_CommonLib)
 ReMake_AddTarget(
 	TARGET_NAME ${TargetName}
 	MODE SHARED
-	LIB_INTERFACE ReTemplate
+	LIB_INTERFACE ResetCore_Template
 )
 
 ReMake_StartUse()
+UseSpdLog(${TargetName})
 UseFmt(${TargetName})
-UseSpdlog(${TargetName})
 UseTinyDir(${TargetName})
 UseIniFile(${TargetName})
 UseFileDialog(${TargetName})

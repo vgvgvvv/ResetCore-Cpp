@@ -1,4 +1,0 @@
-ResetCore_CommonLib=>D:/Documents/MyProjects/playground/external/re-third-part/src/fmt/Fmt.CustomModule.json
-ResetCore_CommonLib=>D:/Documents/MyProjects/playground/external/re-third-part/src/spdlog-1.8.1/SpdLog.CustomModule.json
-ResetCore_CommonLib=>D:/Documents/MyProjects/playground/external/re-third-part/src/tinydir-1.2.4/TinyDir.CustomModule.json
-ResetCore_CommonLib=>D:/Documents/MyProjects/playground/external/re-third-part/src/protable-file-dialogs/FileDialog.CustomModule.json

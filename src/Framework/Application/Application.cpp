@@ -3,7 +3,7 @@
 #include <chrono>
 
 #include "CommonAssert.h"
-#include "Logging/Log.h"
+#include "Common.h"
 
 Application* Application::Instance = nullptr;
 Application& Application::Get()

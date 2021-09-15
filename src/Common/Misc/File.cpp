@@ -7,6 +7,7 @@
 #include <string>
 
 #include "CommonAssert.h"
+#include "Common.h"
 
 namespace CommonLib
 {

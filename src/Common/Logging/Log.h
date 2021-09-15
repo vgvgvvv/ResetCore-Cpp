@@ -1,8 +1,13 @@
 #pragma once
+#include <list>
+#include <memory>
 #include <string>
+
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "ResetCore_CommonLib_API.h"
+
+
 
 class ILogHandler
 {
@@ -32,16 +37,17 @@ public:
 };
 
 
+
 template <typename... Args>
-void ::LogContext::Info(const std::string& tag, const std::string& formatString, const Args&... args)
+void LogContext::Info(const std::string& tag, const std::string& formatString, const Args&... args)
 {
 	auto logger = spdlog::get(tag);
-	if(!logger)
+	if (!logger)
 	{
 		logger = spdlog::stdout_color_mt(tag);
 	}
 	logger->info(formatString, args...);
-	
+
 	for (auto& handler : handlers)
 	{
 		handler->Info(fmt::format(formatString, args...));
@@ -50,7 +56,7 @@ void ::LogContext::Info(const std::string& tag, const std::string& formatString,
 
 
 template <typename... Args>
-void ::LogContext::Debug(const std::string& tag, const std::string& formatString, const Args&... args)
+void LogContext::Debug(const std::string& tag, const std::string& formatString, const Args&... args)
 {
 	auto logger = spdlog::get(tag);
 	if (!logger)
@@ -66,7 +72,7 @@ void ::LogContext::Debug(const std::string& tag, const std::string& formatString
 }
 
 template <typename... Args>
-void ::LogContext::Warn(const std::string& tag, const std::string& formatString, const Args&... args)
+void LogContext::Warn(const std::string& tag, const std::string& formatString, const Args&... args)
 {
 	auto logger = spdlog::get(tag);
 	if (!logger)
@@ -82,7 +88,7 @@ void ::LogContext::Warn(const std::string& tag, const std::string& formatString,
 }
 
 template <typename... Args>
-void ::LogContext::Error(const std::string& tag, const std::string& formatString, const Args&... args)
+void LogContext::Error(const std::string& tag, const std::string& formatString, const Args&... args)
 {
 	auto logger = spdlog::get(tag);
 	if (!logger)

@@ -1,4 +1,5 @@
 #pragma once
+#include "vulkan/vulkan.h"
 #include "Singleton.h"
 #include "VulkanRHI_API.h"
 
@@ -8,5 +9,7 @@ class VulkanRHI_API VulkanRHI
 public:
 
 private:
-	
+	void CreateInstance();
+    VkInstance instance = VK_NULL_HANDLE; // VkÊµÀý
+
 };

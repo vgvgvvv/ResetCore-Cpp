@@ -31,8 +31,10 @@ void VulkanInstance::Init()
 	instanceExtensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 #if PLATFORM_WINDOWS
 	instanceExtensions.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
+#elif PLATFORM_MACOS
+	instanceExtensions.push_back(VK_MVK_MACOS_SURFACE_EXTENSION_NAME);
 #else
-	
+	#error Not Support This Platform
 #endif
 	
 	// 最终创建实例

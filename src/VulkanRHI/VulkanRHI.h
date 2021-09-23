@@ -1,5 +1,4 @@
 #pragma once
-#include "vulkan/vulkan.h"
 #include "Singleton.h"
 #include "VulkanRHI_API.h"
 

@@ -9,7 +9,5 @@ class VulkanRHI_API VulkanRHI
 public:
 
 private:
-	void CreateInstance();
-    VkInstance instance = VK_NULL_HANDLE; // VkÊµÀý
 
 };

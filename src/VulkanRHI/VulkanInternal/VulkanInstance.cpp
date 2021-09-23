@@ -1,37 +1,43 @@
 #include "VulkanInstance.h"
+
+
 #include <iostream>
 #include <vector>
 
+#include "VulkanInitializers.h"
+#include "VulkanTools.h"
+#include "Logging/Log.h"
+
+using namespace VKRHI::Initializers;
+using namespace VKRHI::Tools;
+
 void VulkanInstance::Init()
 {
-	// Program Info
-	// 用于部分驱动对于特定引擎或者程序的优化
-	VkApplicationInfo appInfo = {};
-	// 指定Info类型
-	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	appInfo.pApplicationName = "Hello Triangle";
-	appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-	appInfo.pEngineName = "No Engine";
-	appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-	appInfo.apiVersion = VK_API_VERSION_1_0;
+	VkApplicationInfo appInfo = 
+		CreateVkApplicationInfo("Hello Triangle", "No Engine");
 
 	// Instance 创建信息
-	VkInstanceCreateInfo createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	createInfo.pApplicationInfo = &appInfo;
+	VkInstanceCreateInfo createInfo = CreateVkInstanceCreateInfo(&appInfo);
 
-	// 输出可用的Vulkan扩展
-	uint32_t extensionCount = 0;
-	vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount
-		, nullptr);
-	std::vector<VkExtensionProperties> extensions(extensionCount);
-	vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
-
-	std::cout << "available extensions: " << std::endl;
+	auto extensions = GetAvailableExtensionProperties();
+	RE_LOG_INFO("Vulkan", "available extensions: ")
 	for (const auto& extension : extensions)
 	{
-		std::cout << "\t" << extension.extensionName << std::endl;
+		RE_LOG_INFO("Vulkan", "\t{0}", extension.extensionName)
 	}
+
+	//TODO
+
+	instanceExtensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
+#if PLATFORM_WINDOWS
+	instanceExtensions.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
+#else
+	
+#endif
+	
+	// 最终创建实例
+	// 创建信息	+ 分配器函数 + 储存Instance的指针
+	VK_CHECK_RESULT(vkCreateInstance(&createInfo, nullptr, &instance));
 }
 
 VulkanInstance::~VulkanInstance()

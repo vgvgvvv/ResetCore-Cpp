@@ -81,5 +81,17 @@ namespace VKRHI
 
 			return false;
 		}
+
+		std::vector<VkExtensionProperties> GetAvailableExtensionProperties()
+		{
+			// 输出可用的Vulkan扩展
+			uint32_t extensionCount = 0;
+			VK_CHECK_RESULT(vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount
+				, nullptr));
+			std::vector<VkExtensionProperties> extensions(extensionCount);
+			VK_CHECK_RESULT(vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data()));
+
+			return extensions;
+		}
 	}
 }

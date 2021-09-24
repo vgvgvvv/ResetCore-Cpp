@@ -15,6 +15,10 @@
 	}																									\
 }
 
+#define DELETE_AND_SET_NULLPTR(Var) \
+	delete Var;						\
+	Var = nullptr;
+
 namespace VKRHI
 {
 	namespace Tools

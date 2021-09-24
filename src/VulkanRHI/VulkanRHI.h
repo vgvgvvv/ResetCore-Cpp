@@ -2,9 +2,12 @@
 #include "Singleton.h"
 #include "Class/ClassInfo.h"
 #include "VulkanRHI_API.h"
-#include "VulkanInternal/VulkanInstance.h"
-#include "VulkanInternal/VulkanDebugLayer.h"
-#include "VulkanInternal/VulkanSurface.h"
+
+#include <windows.h>
+
+class VulkanInstance;
+class VulkanDebugLayer;
+class VulkanSurface;
 
 class VulkanRHI_API VulkanRHI
 {
@@ -14,13 +17,8 @@ public:
 	void Init(HINSTANCE windowInstance, HWND window);
 	void Uninit();
 
-	DEFINE_GETTER(VulkanInstance, instance);
-	DEFINE_GETTER(VulkanDebugLayer, debugLayer);
-	DEFINE_GETTER(VulkanSurface, surface);
-
-	
 private:
-	VulkanInstance instance;
-	VulkanDebugLayer debugLayer;
-	VulkanSurface surface;
+	VulkanInstance* instance;
+	VulkanDebugLayer* debugLayer;
+	VulkanSurface* surface;
 };

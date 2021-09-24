@@ -5,6 +5,7 @@
 #endif
 
 #include "Application/Layer.h"
+#include "Class/ClassInfo.h"
 #include "ResetCore_Framework_API.h"
 
 #if PLATFORM_WINDOWS
@@ -21,6 +22,10 @@ public:
 	void OnUpdate(float deltaTime) override;
 	void OnShutDown() override;
 	bool ShouldQuit() override;
+
+	DEFINE_GETTER(HINSTANCE, appInstance);
+	DEFINE_GETTER(HWND, mhMainWnd);
+	
 private:
 	bool InitWindow();
 

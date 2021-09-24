@@ -3,6 +3,9 @@
 
 #include "vulkan/vulkan.h"
 #include "Logging/Log.h"
+#if PLATFORM_WINDOWS
+#include <windows.h>
+#endif
 
 namespace VKRHI
 {
@@ -77,6 +80,18 @@ namespace VKRHI
 			
 			return debugCreateInfo;
 		}
+
+#if PLATFORM_WINDOWS
+		inline VkWin32SurfaceCreateInfoKHR CreateVkWin32SurfaceCreateInfoKHR(HINSTANCE platformHandle, HWND platformWindow)
+		{
+			VkWin32SurfaceCreateInfoKHR surfaceCreateInfo = {};
+			surfaceCreateInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+			surfaceCreateInfo.hinstance = (HINSTANCE)platformHandle;
+			surfaceCreateInfo.hwnd = (HWND)platformWindow;
+			return surfaceCreateInfo;
+		}
+#endif
+		
 		
 	}
 }

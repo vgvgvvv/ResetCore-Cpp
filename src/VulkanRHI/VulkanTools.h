@@ -32,6 +32,5 @@ namespace VKRHI
 		// 获取可用的扩展属性
 		std::vector<VkExtensionProperties> GetAvailableExtensionProperties();
 
-		
 	}
 }

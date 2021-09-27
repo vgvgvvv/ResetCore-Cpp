@@ -1,6 +1,7 @@
 #include "WindowLayer.h"
 
 #include "Logging/Log.h"
+#include "Platform/Windows/WindowsMisc.h"
 
 #if PLATFORM_WINDOWS
 
@@ -26,6 +27,7 @@ MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void WindowLayer::OnInit()
 {
+	Common::Windows::ShowConsole("Debug Console");
 	if(!InitWindow())
 	{
 		RE_LOG_ERROR("Window", "Cannot Init Window");

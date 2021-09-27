@@ -27,6 +27,9 @@ private:
 	void CreateSwapChain();
 	void DestroySwapChain();
 
+	void CreateImageView();
+	void DestroyImageView();
+
 private:
 	VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 	VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);

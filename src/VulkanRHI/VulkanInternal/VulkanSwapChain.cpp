@@ -10,10 +10,12 @@ void VulkanSwapChain::Init(VulkanDevice* owner)
 {
 	this->owner = owner;
 	CreateSwapChain();
+	CreateImageView();
 }
 
 void VulkanSwapChain::Uninit()
 {
+	DestroyImageView();
 	DestroySwapChain();
 }
 
@@ -107,6 +109,23 @@ void VulkanSwapChain::DestroySwapChain()
 {
 	// Ïú»ÙSwapChain
 	vkDestroySwapchainKHR(owner->get_device(), swapchain, nullptr);
+}
+
+
+void VulkanSwapChain::CreateImageView()
+{
+}
+
+void VulkanSwapChain::DestroyImageView()
+{
+}
+
+void VulkanSwapChain::CreateFramebuffer()
+{
+}
+
+void VulkanSwapChain::DestroyFramebuffer()
+{
 }
 
 VkSurfaceFormatKHR VulkanSwapChain::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)

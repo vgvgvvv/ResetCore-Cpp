@@ -15,52 +15,16 @@ using namespace VKRHI::Tools;
 
 
 
-void VulkanInstance::Init()
+void VulkanInstance::Init(HINSTANCE windowInstance, HWND window)
 {
-
-	static bool enableValidationLayers = GlobalContext::Get().GetBoolValue("vulkan.enableValidationLayers");
-	
-	VkApplicationInfo appInfo = 
-		CreateVkApplicationInfo("Hello Triangle", "No Engine");
-
-	// Instance 创建信息
-	VkInstanceCreateInfo createInfo = CreateVkInstanceCreateInfo(&appInfo);
-
-	auto extensions = GetAvailableExtensionProperties();
-	RE_LOG_INFO("Vulkan", "available extensions: ")
-	for (const auto& extension : extensions)
-	{
-		RE_LOG_INFO("Vulkan", "\t{0}", extension.extensionName)
-	}
-
-	// 获取可用的扩展
-	auto instanceExtensions = GetInstanceExtensions();
-
-	createInfo.enabledExtensionCount = static_cast<uint32_t>(instanceExtensions.size());
-	createInfo.ppEnabledExtensionNames = instanceExtensions.data();
-
-	// 初始化验证层
-	if(enableValidationLayers)
-	{
-		auto debugCreateInfo = CreateVkDebugUtilsMessengerCreateInfoEXT();
-		createInfo.enabledLayerCount = validationLayers.size();
-		createInfo.ppEnabledLayerNames = validationLayers.data();
-		createInfo.pNext = &debugCreateInfo;
-	}else
-	{
-		createInfo.enabledLayerCount = 0;
-		createInfo.pNext = nullptr;
-	}
-	
-	// 最终创建实例
-	// 创建信息	+ 分配器函数 + 储存Instance的指针
-	VK_CHECK_RESULT(vkCreateInstance(&createInfo, nullptr, &instance));
+	CreateInstance();
+	debugLayer.Init(instance);
 }
 
 void VulkanInstance::Uninit()
 {
-	// 销毁实例
-	vkDestroyInstance(instance, nullptr);
+	debugLayer.Uninit(instance);
+	DestroyInstance();
 }
 
 
@@ -130,7 +94,57 @@ std::vector<const char*> VulkanInstance::GetInstanceExtensions()
 	return instanceExtensions;
 }
 
+void VulkanInstance::CreateInstance()
+{
+	static bool enableValidationLayers = GlobalContext::Get().GetBoolValue("vulkan.enableValidationLayers");
+
+	VkApplicationInfo appInfo =
+		CreateVkApplicationInfo("Hello Triangle", "No Engine");
+
+	// Instance 创建信息
+	VkInstanceCreateInfo createInfo = CreateVkInstanceCreateInfo(&appInfo);
+
+	auto extensions = GetAvailableExtensionProperties();
+	RE_LOG_INFO("Vulkan", "available extensions: ")
+		for (const auto& extension : extensions)
+		{
+			RE_LOG_INFO("Vulkan", "\t{0}", extension.extensionName)
+		}
+
+	// 获取可用的扩展
+	auto instanceExtensions = GetInstanceExtensions();
+
+	createInfo.enabledExtensionCount = static_cast<uint32_t>(instanceExtensions.size());
+	createInfo.ppEnabledExtensionNames = instanceExtensions.data();
+
+	// 初始化验证层
+	if (enableValidationLayers)
+	{
+		auto debugCreateInfo = CreateVkDebugUtilsMessengerCreateInfoEXT();
+		createInfo.enabledLayerCount = validationLayers.size();
+		createInfo.ppEnabledLayerNames = validationLayers.data();
+		createInfo.pNext = &debugCreateInfo;
+	}
+	else
+	{
+		createInfo.enabledLayerCount = 0;
+		createInfo.pNext = nullptr;
+	}
+
+	// 最终创建实例
+	// 创建信息	+ 分配器函数 + 储存Instance的指针
+	VK_CHECK_RESULT(vkCreateInstance(&createInfo, nullptr, &instance));
+}
+
+void VulkanInstance::DestroyInstance()
+{
+	// 销毁实例
+	vkDestroyInstance(instance, nullptr);
+}
+
 VulkanInstance::~VulkanInstance()
 {
 	
 }
+
+

@@ -19,6 +19,7 @@
 	delete Var;						\
 	Var = nullptr;
 
+
 namespace VKRHI
 {
 	namespace Tools
@@ -35,6 +36,11 @@ namespace VKRHI
 
 		// 获取可用的扩展属性
 		std::vector<VkExtensionProperties> GetAvailableExtensionProperties();
+
+		bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
+
+		using IsDeviceSuitableFunc = bool(*)(VkPhysicalDevice);
+		VkResult GetPhysicalDevice(VkInstance instance, VkPhysicalDevice& result, IsDeviceSuitableFunc isDeviceSuitable);
 
 	}
 }

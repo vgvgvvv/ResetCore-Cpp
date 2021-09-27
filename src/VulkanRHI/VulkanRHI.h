@@ -6,8 +6,8 @@
 #include <windows.h>
 
 class VulkanInstance;
-class VulkanDebugLayer;
 class VulkanSurface;
+class VulkanDevice;
 
 class VulkanRHI_API VulkanRHI
 {
@@ -19,6 +19,5 @@ public:
 
 private:
 	VulkanInstance* instance;
-	VulkanDebugLayer* debugLayer;
-	VulkanSurface* surface;
+	VulkanDevice* device;
 };

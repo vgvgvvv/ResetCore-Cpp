@@ -1,6 +1,9 @@
 #include "VulkanTools.h"
 
 #include <vector>
+#include "DeviceExtension.h"
+#include <set>
+#include "CommonAssert.h"
 
 namespace VKRHI
 {
@@ -94,5 +97,51 @@ namespace VKRHI
 			return extensions;
 		}
 
+
+		bool CheckDeviceExtensionSupport(VkPhysicalDevice device)
+		{
+			uint32_t extensionCount;
+			vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
+
+			std::vector<VkExtensionProperties> availableDeviceExtensions(extensionCount);
+			vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableDeviceExtensions.data());
+
+			std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
+
+			// 查看是否所有需要的扩展都能够找到
+			for (const auto& extension : availableDeviceExtensions)
+			{
+				requiredExtensions.erase(extension.extensionName);
+			}
+
+			return requiredExtensions.empty();
+		}
+
+		VkResult GetPhysicalDevice(VkInstance instance, VkPhysicalDevice& resultDevice, IsDeviceSuitableFunc isDeviceSuitable)
+		{
+			uint32_t deviceCount = 0;
+			VK_CHECK_RESULT(vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr));
+
+			// 未找到任何设备
+			RE_ASSERT_MSG(deviceCount != 0, "failed to find GPUs with Vulkan support!")
+
+				std::vector<VkPhysicalDevice> devices(deviceCount);
+			VK_CHECK_RESULT(vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data()));
+
+			// 判断是否可用
+			for (const auto& device : devices)
+			{
+				// 除了通过可用性筛选硬件，也可以通过分数来选择
+				if (isDeviceSuitable(device))
+				{
+					resultDevice = device;
+					break;
+				}
+			}
+
+			RE_ASSERT_MSG(resultDevice != VK_NULL_HANDLE, "failed to find a suitable GPU!")
+
+				return VkResult::VK_SUCCESS;
+		}
 	}
 }

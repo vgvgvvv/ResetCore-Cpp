@@ -1,4 +1,5 @@
 #pragma once
+#include "Logging/Log.h"
 
 #if _DEBUG
 #define RE_ASSERT(x) if(!(x)) __debugbreak();

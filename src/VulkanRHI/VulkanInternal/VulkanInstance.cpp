@@ -19,10 +19,12 @@ void VulkanInstance::Init(HINSTANCE windowInstance, HWND window)
 {
 	CreateInstance();
 	debugLayer.Init(instance);
+	device.Init(this, windowInstance, window);
 }
 
 void VulkanInstance::Uninit()
 {
+	device.Uninit();
 	debugLayer.Uninit(instance);
 	DestroyInstance();
 }

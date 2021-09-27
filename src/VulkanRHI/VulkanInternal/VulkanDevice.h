@@ -2,8 +2,11 @@
 #include "vulkan/vulkan.h"
 #include "Class/ClassInfo.h"
 #include "VulkanSwapChain.h"
+#include "VulkanSurface.h"
 #include <optional>
-#include "VulkanInstance.h"
+
+
+class VulkanInstance;
 
 // 队列族
 struct QueueFamilyIndices
@@ -20,7 +23,7 @@ struct QueueFamilyIndices
 class VulkanDevice
 {
 public:
-	void Init(const VulkanInstance* owner, HINSTANCE windowInstance, HWND window);
+	void Init(VulkanInstance* owner, HINSTANCE windowInstance, HWND window);
 	void Uninit();
 	
 	QueueFamilyIndices FindQueueFamilies();
@@ -29,18 +32,26 @@ public:
 	DEFINE_GETTER(VkDevice, device);
 
 protected:
+	// 是否是合适的Physic设备
 	virtual bool IsDeviceSuitable(VkPhysicalDevice device);
-
+	// 获取设备特性
+	virtual VkPhysicalDeviceFeatures GetDeviceFeature();
 private:
+	void FindPhysicxDevice();
 	void CreateLogicDevice();
+	void DestroyLogicDevice();
 	QueueFamilyIndices FindQueueFamilies_Internal(VkPhysicalDevice device);
+	SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device);
 private:
-	VkPhysicalDevice physicalDevice;
-	VkDevice device;
+	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;		// 物理设备
+	VkDevice device = VK_NULL_HANDLE;						// 物理设备
+	VkQueue graphicsQueue = VK_NULL_HANDLE;					// 逻辑图形设备队列
 
-	VulkanSurface surface;
-	VulkanSwapChain swapchain;
+	VulkanSurface surface;									// 窗口Surface
+	VkQueue presentQueue = VK_NULL_HANDLE;					// 显示队列
+	
+	VulkanSwapChain swapchain;								// 交换链
 
 private:
-	const VulkanInstance* owner;
+	class VulkanInstance* owner;
 };

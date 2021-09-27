@@ -56,7 +56,21 @@ namespace VKRHI
 			void* pUserData
 		)
 		{
-			RE_LOG_ERROR("Vulkan", "validation layer: {0}", pCallbackData->pMessage);
+			switch (messageSeverity)
+			{
+			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+				RE_LOG_INFO("Vulkan", "validation layer: {0}", pCallbackData->pMessage);
+				break;
+			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+				RE_LOG_DEBUG("Vulkan", "validation layer: {0}", pCallbackData->pMessage);
+				break;
+			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+				RE_LOG_WARN("Vulkan", "validation layer: {0}", pCallbackData->pMessage);
+				break;
+			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+				RE_LOG_ERROR("Vulkan", "validation layer: {0}", pCallbackData->pMessage);
+				break;
+			}
 			return VK_FALSE;
 		}
 
@@ -91,6 +105,16 @@ namespace VKRHI
 			return surfaceCreateInfo;
 		}
 #endif
+
+		inline VkDeviceQueueCreateInfo CreateVkDeviceQueueCreateInfo(uint32_t queueFamilyIndex, float* queuePriority, int queueCount)
+		{
+			VkDeviceQueueCreateInfo queueCreateInfo{};
+			queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+			queueCreateInfo.queueFamilyIndex = queueFamilyIndex;
+			queueCreateInfo.pQueuePriorities = queuePriority;
+			queueCreateInfo.queueCount = 1;
+			return queueCreateInfo;
+		}
 		
 		
 	}

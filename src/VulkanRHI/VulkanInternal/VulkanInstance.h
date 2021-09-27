@@ -5,7 +5,6 @@
 #include <string>
 #include "Class/ClassInfo.h"
 #include "VulkanDebugLayer.h"
-#include "VulkanSurface.h"
 #include "VulkanDevice.h"
 
 class VulkanInstance

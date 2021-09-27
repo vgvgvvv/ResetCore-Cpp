@@ -20,6 +20,10 @@ public:
 
 	void Init();
 	void Unit();
+
+private:
+	void CreateSwapChain();
+	void DestroySwapChain();
 	
 	DEFINE_GETTER(VkSwapchainKHR, swapchain);
 private:

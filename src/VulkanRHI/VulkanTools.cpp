@@ -4,6 +4,7 @@
 #include "DeviceExtension.h"
 #include <set>
 #include "CommonAssert.h"
+#include "VulkanInternal/VulkanSwapChain.h"
 
 namespace VKRHI
 {
@@ -117,31 +118,5 @@ namespace VKRHI
 			return requiredExtensions.empty();
 		}
 
-		VkResult GetPhysicalDevice(VkInstance instance, VkPhysicalDevice& resultDevice, IsDeviceSuitableFunc isDeviceSuitable)
-		{
-			uint32_t deviceCount = 0;
-			VK_CHECK_RESULT(vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr));
-
-			// 未找到任何设备
-			RE_ASSERT_MSG(deviceCount != 0, "failed to find GPUs with Vulkan support!")
-
-				std::vector<VkPhysicalDevice> devices(deviceCount);
-			VK_CHECK_RESULT(vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data()));
-
-			// 判断是否可用
-			for (const auto& device : devices)
-			{
-				// 除了通过可用性筛选硬件，也可以通过分数来选择
-				if (isDeviceSuitable(device))
-				{
-					resultDevice = device;
-					break;
-				}
-			}
-
-			RE_ASSERT_MSG(resultDevice != VK_NULL_HANDLE, "failed to find a suitable GPU!")
-
-				return VkResult::VK_SUCCESS;
-		}
 	}
 }

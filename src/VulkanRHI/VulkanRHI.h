@@ -1,6 +1,7 @@
 #pragma once
 #include "Singleton.h"
 #include "Class/ClassInfo.h"
+#include "VulkanSetting.h"
 #include "VulkanRHI_API.h"
 
 #include <windows.h>

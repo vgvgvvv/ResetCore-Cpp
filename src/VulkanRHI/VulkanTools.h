@@ -39,8 +39,5 @@ namespace VKRHI
 
 		bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
 
-		using IsDeviceSuitableFunc = bool(*)(VkPhysicalDevice);
-		VkResult GetPhysicalDevice(VkInstance instance, VkPhysicalDevice& result, IsDeviceSuitableFunc isDeviceSuitable);
-
 	}
 }

@@ -1,24 +1,18 @@
 #pragma once 
 #include "Application/Layer.h"
-#if PLATFORM_WINDOWS
-#include <windows.h>
-#endif
+#include "Layers/WindowLayer.h"
 
 class VulkanRHILayer : public Layer
 {
 public:
-#if PLATFORM_WINDOWS
-	VulkanRHILayer(HINSTANCE appInstance, HWND mhMainWnd)
-		: appInstance(appInstance)
-		, mhMainWnd(mhMainWnd)
+	VulkanRHILayer(WindowLayer* windowLayer)
+		: windowLayer(windowLayer)
 	{
 	}
-#endif
 	void OnInit() override;
 	void OnShutDown() override;
 
 private:
-	HINSTANCE appInstance;
-	HWND      mhMainWnd = nullptr;
+	const WindowLayer* windowLayer;
 
 };

@@ -25,6 +25,8 @@ public:
 
 	DEFINE_GETTER(HINSTANCE, appInstance);
 	DEFINE_GETTER(HWND, mhMainWnd);
+	DEFINE_GETTER(int, width);
+	DEFINE_GETTER(int, height);
 	
 private:
 	bool InitWindow();

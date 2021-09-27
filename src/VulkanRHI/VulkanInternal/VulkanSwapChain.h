@@ -2,6 +2,8 @@
 #include "vulkan/vulkan.h"
 #include "Class/ClassInfo.h"
 
+class VulkanDevice;
+
 // SwapChain的功能支持情况
 struct SwapChainSupportDetails
 {
@@ -18,12 +20,17 @@ class VulkanSwapChain
 {
 public:
 
-	void Init();
-	void Unit();
+	void Init(VulkanDevice* owner);
+	void Uninit();
 
 private:
 	void CreateSwapChain();
 	void DestroySwapChain();
+
+private:
+	VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+	VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
+	VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, int width, int height);
 	
 	DEFINE_GETTER(VkSwapchainKHR, swapchain);
 private:
@@ -35,4 +42,7 @@ private:
 	VkFormat swapChainImageFormat;
 	// 交换链大小
 	VkExtent2D swapChainExtent;
+
+private:
+	VulkanDevice* owner;
 };

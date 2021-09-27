@@ -10,9 +10,10 @@ void VulkanRHI::InitSingleton()
 	instance = new VulkanInstance;
 }
 
-void VulkanRHI::Init(HINSTANCE windowInstance, HWND window)
+void VulkanRHI::Init(WindowInfo windowInfo)
 {
-	instance->Init(windowInstance, window);
+	this->windowInfo = windowInfo;
+	instance->Init(windowInfo.windowInstance, windowInfo.window);
 }
 
 void VulkanRHI::Uninit()

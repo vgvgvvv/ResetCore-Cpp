@@ -4,21 +4,33 @@
 #include "VulkanSetting.h"
 #include "VulkanRHI_API.h"
 
-#include <windows.h>
-
 class VulkanInstance;
 class VulkanSurface;
 class VulkanDevice;
+
+struct WindowInfo
+{
+	int width;
+	int height;
+#if PLATFORM_WINDOWS
+	HINSTANCE windowInstance;
+	HWND window;
+#endif
+};
 
 class VulkanRHI_API VulkanRHI
 {
 	DEFINE_SINGLETON(VulkanRHI)
 public:
 
-	void Init(HINSTANCE windowInstance, HWND window);
+	void Init(WindowInfo windowInfo);
 	void Uninit();
 
+	DEFINE_GETTER(WindowInfo, windowInfo);
+	
 private:
 	VulkanInstance* instance;
 	VulkanDevice* device;
+
+	WindowInfo windowInfo;
 };

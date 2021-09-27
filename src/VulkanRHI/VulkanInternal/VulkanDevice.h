@@ -9,7 +9,7 @@
 class VulkanInstance;
 
 // 队列族
-struct QueueFamilyIndices
+struct VulkanQueueFamilyIndices
 {
 	std::optional<uint32_t> graphicsFamily;
 	std::optional<uint32_t> presentFamily;
@@ -26,10 +26,13 @@ public:
 	void Init(VulkanInstance* owner, HINSTANCE windowInstance, HWND window);
 	void Uninit();
 	
-	QueueFamilyIndices FindQueueFamilies();
+	VulkanQueueFamilyIndices FindQueueFamilies();
+	SwapChainSupportDetails QuerySwapChainSupport();
 	
 	DEFINE_GETTER(VkPhysicalDevice, physicalDevice);
 	DEFINE_GETTER(VkDevice, device);
+	DEFINE_GETTER(VulkanSurface, surface);
+	DEFINE_GETTER(VulkanSwapChain, swapchain);
 
 protected:
 	// 是否是合适的Physic设备
@@ -40,8 +43,8 @@ private:
 	void FindPhysicxDevice();
 	void CreateLogicDevice();
 	void DestroyLogicDevice();
-	QueueFamilyIndices FindQueueFamilies_Internal(VkPhysicalDevice device);
-	SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device);
+	VulkanQueueFamilyIndices FindQueueFamilies_Internal(VkPhysicalDevice device);
+	SwapChainSupportDetails QuerySwapChainSupport_Internal(VkPhysicalDevice device);
 private:
 	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;		// 物理设备
 	VkDevice device = VK_NULL_HANDLE;						// 物理设备

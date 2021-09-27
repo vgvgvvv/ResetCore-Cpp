@@ -18,20 +18,26 @@ void VulkanDevice::Init(VulkanInstance* owner,  HINSTANCE windowInstance, HWND w
 	FindPhysicxDevice();
 	CreateLogicDevice();
 
-	swapchain.Init();
+	swapchain.Init(this);
 }
 
 void VulkanDevice::Uninit()
 {
-	swapchain.Unit();
+	swapchain.Uninit();
 	DestroyLogicDevice();
 	surface.Uninit(owner->get_instance());
 }
 
 // 获取用于物理设备的队列
-QueueFamilyIndices VulkanDevice::FindQueueFamilies()
+VulkanQueueFamilyIndices VulkanDevice::FindQueueFamilies()
 {
 	return FindQueueFamilies_Internal(physicalDevice);
+}
+
+
+SwapChainSupportDetails VulkanDevice::QuerySwapChainSupport()
+{
+	return QuerySwapChainSupport_Internal(physicalDevice);
 }
 
 bool VulkanDevice::IsDeviceSuitable(VkPhysicalDevice device)
@@ -53,7 +59,7 @@ bool VulkanDevice::IsDeviceSuitable(VkPhysicalDevice device)
 	bool swapChainAdequate = false;
 	if (extensionSupport)
 	{
-		SwapChainSupportDetails swapChainSupport = QuerySwapChainSupport(device);
+		SwapChainSupportDetails swapChainSupport = QuerySwapChainSupport_Internal(device);
 		swapChainAdequate = !swapChainSupport.formats.empty() &&
 			!swapChainSupport.presentModes.empty();
 	}
@@ -99,9 +105,9 @@ void VulkanDevice::FindPhysicxDevice()
 	}
 }
 
-QueueFamilyIndices VulkanDevice::FindQueueFamilies_Internal(VkPhysicalDevice device)
+VulkanQueueFamilyIndices VulkanDevice::FindQueueFamilies_Internal(VkPhysicalDevice device)
 {
-	QueueFamilyIndices indices;
+	VulkanQueueFamilyIndices indices;
 
 	// 获取Queue Family属性
 	uint32_t queueFamilyCount = 0;
@@ -141,7 +147,7 @@ QueueFamilyIndices VulkanDevice::FindQueueFamilies_Internal(VkPhysicalDevice dev
 }
 
 // 查看SwapChain支持情况
-SwapChainSupportDetails VulkanDevice::QuerySwapChainSupport(VkPhysicalDevice device)
+SwapChainSupportDetails VulkanDevice::QuerySwapChainSupport_Internal(VkPhysicalDevice device)
 {
 	SwapChainSupportDetails details;
 	auto swapChainSurface = surface.get_surface();
@@ -175,7 +181,7 @@ SwapChainSupportDetails VulkanDevice::QuerySwapChainSupport(VkPhysicalDevice dev
 void VulkanDevice::CreateLogicDevice()
 {
 	// 获取我们之前得到的物理设备
-	QueueFamilyIndices indices = FindQueueFamilies();
+	VulkanQueueFamilyIndices indices = FindQueueFamilies();
 
 	std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 	//获取所有需要的队列

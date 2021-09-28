@@ -1,5 +1,5 @@
 #pragma once
-#include "D3DStructs.h"
+#include "D3D11Structs.h"
 #include "Misc/GlobalContext.h"
 
 namespace D3D11

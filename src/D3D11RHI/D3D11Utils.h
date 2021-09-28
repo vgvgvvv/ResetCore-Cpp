@@ -4,7 +4,7 @@
 #include "D3D11Internal/DXTrace.h"
 #include "Class/ClassInfo.h"
 #include "D3D11Initializers.h"
-#include "D3DStructs.h"
+#include "D3D11Structs.h"
 
 // 使用模板别名(C++11)简化类型名
 template <class T>

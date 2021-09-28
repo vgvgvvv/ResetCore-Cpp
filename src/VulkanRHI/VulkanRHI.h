@@ -9,7 +9,7 @@ class VulkanInstance;
 class VulkanSurface;
 class VulkanDevice;
 
-struct WindowInfo
+struct VulkanWindowInfo
 {
 	int width;
 	int height;
@@ -24,17 +24,14 @@ class VulkanRHI_API VulkanRHI
 	DEFINE_SINGLETON(VulkanRHI)
 public:
 
-	void Init(WindowInfo windowInfo);
+	void Init(VulkanWindowInfo windowInfo);
 	void Uninit();
 
-	DEFINE_GETTER(WindowInfo, windowInfo);
-
-public:
-	
+	DEFINE_GETTER(VulkanWindowInfo, windowInfo);
 	
 private:
 	VulkanInstance* instance;
 	VulkanDevice* device;
 
-	WindowInfo windowInfo;
+	VulkanWindowInfo windowInfo;
 };

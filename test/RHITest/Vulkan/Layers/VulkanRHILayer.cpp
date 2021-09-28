@@ -6,7 +6,7 @@
 
 void VulkanRHILayer::OnInit()
 {
-	WindowInfo info;
+	VulkanWindowInfo info;
 	info.windowInstance = windowLayer->get_appInstance();
 	info.window = windowLayer->get_mhMainWnd();
 #if PLATFORM_WINDOWS

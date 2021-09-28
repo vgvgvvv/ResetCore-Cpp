@@ -2,6 +2,7 @@
 #include "Singleton.h"
 #include "Class/ClassInfo.h"
 #include "VulkanSetting.h"
+#include "VulkanAPI/VulkanBuffer.h"
 #include "VulkanRHI_API.h"
 
 class VulkanInstance;
@@ -27,6 +28,9 @@ public:
 	void Uninit();
 
 	DEFINE_GETTER(WindowInfo, windowInfo);
+
+public:
+	
 	
 private:
 	VulkanInstance* instance;

@@ -36,6 +36,9 @@ private:
 	VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, int width, int height);
 	
 	DEFINE_GETTER(VkSwapchainKHR, swapchain);
+	DEFINE_GETTER(std::vector<VkImage>, swapChainImages);
+	DEFINE_GETTER(VkFormat, swapChainImageFormat);
+	DEFINE_GETTER(std::vector<VkImageView>, swapChainImageViews);
 private:
 	// 交换链
 	VkSwapchainKHR swapchain;
@@ -45,6 +48,8 @@ private:
 	VkFormat swapChainImageFormat;
 	// 交换链大小
 	VkExtent2D swapChainExtent;
+
+	std::vector<VkImageView> swapChainImageViews;
 
 private:
 	VulkanDevice* owner;

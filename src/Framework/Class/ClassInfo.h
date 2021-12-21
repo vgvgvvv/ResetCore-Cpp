@@ -17,9 +17,11 @@
 
 #define DEFINE_CLASS(className) \
 public:\
+	typedef className ClassType; \
 	typedef void Super; \
 	static std::string StaticClassName() { return #className;}\
 	static const Class* StaticClass() { return &selfClass; }\
+	virtual const Class* GetClass() { return className::StaticClass(); }\
 	virtual std::string ClassName() { return #className; }\
 private:\
 	static Class selfClass;
@@ -51,10 +53,12 @@ private:\
 
 #define DEFINE_DRIVEN_CLASS(className, baseClassName) \
 public:\
+	typedef className ClassType; \
 	typedef baseClassName Super; \
-	static std::string StaticClassName() { return #className;}\
-	static const Class* StaticClass() { return &selfClass; }\
-	virtual std::string ClassName() override { return #className; }\
+	static std::string StaticClassName() { return #className;} \
+	static const Class* StaticClass() { return &selfClass; } \
+	virtual const Class* GetClass() override { return className::StaticClass(); } \
+	virtual std::string ClassName() override { return #className; } \
 private:\
 	static Class selfClass;
 

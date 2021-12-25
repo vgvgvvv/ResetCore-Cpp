@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common.h"
+#include "CommonHeader.h"
 #include "ResetCore_CommonLib_API.h"
 #include "Platform/Platform.h"
 

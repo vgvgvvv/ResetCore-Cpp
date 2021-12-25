@@ -1,5 +1,8 @@
 #pragma once
+
 #include <string>
+#include <filesystem>
+#include "Platform/Platform.h"
 #include "ResetCore_CommonLib_API.h"
 
 namespace CommonLib

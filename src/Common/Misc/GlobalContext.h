@@ -2,7 +2,7 @@
 #include <map>
 #include <string>
 
-#include "Common.h"
+#include "CommonHeader.h"
 #include "Singleton.h"
 #include "ResetCore_CommonLib_API.h"
 

@@ -51,7 +51,7 @@ private:\
 
 // 定义派生类
 
-#define DEFINE_DRIVEN_CLASS(className, baseClassName) \
+#define DEFINE_DERIVED_CLASS(className, baseClassName) \
 public:\
 	typedef className ClassType; \
 	typedef baseClassName Super; \
@@ -64,7 +64,7 @@ private:\
 
 
 
-#define DEFINE_DRIVEN_CLASS_IMP_BEGIN(className, baseClassName, flag) \
+#define DEFINE_DERIVED_CLASS_IMP_BEGIN(className, baseClassName, flag) \
 	Class className::selfClass(sizeof(className), \
 		baseClassName::StaticClass(), \
 		#className, \
@@ -72,20 +72,20 @@ private:\
 		[](Class* self){ \
 			
 
-#define DEFINE_DRIVEN_CLASS_IMP_END() \
+#define DEFINE_DERIVED_CLASS_IMP_END() \
 	});
 
 
-#define DEFINE_DRIVEN_CLASS_IMP(className, baseClassName) \
-	DEFINE_DRIVEN_CLASS_IMP_BEGIN(className, baseClassName, ClassFlag::None)\
+#define DEFINE_DERIVED_CLASS_IMP(className, baseClassName) \
+	DEFINE_DERIVED_CLASS_IMP_BEGIN(className, baseClassName, ClassFlag::None)\
 	SET_DEFAULT_CLASS_CTOR(className);\
-	DEFINE_DRIVEN_CLASS_IMP_END()
+	DEFINE_DERIVED_CLASS_IMP_END()
 
 
-#define DEFINE_DRIVEN_CLASS_IMP_WITH_FLAG(className, baseClassName, flag) \
-	DEFINE_DRIVEN_CLASS_IMP_BEGIN(className, baseClassName, flag)\
+#define DEFINE_DERIVED_CLASS_IMP_WITH_FLAG(className, baseClassName, flag) \
+	DEFINE_DERIVED_CLASS_IMP_BEGIN(className, baseClassName, flag)\
 	SET_DEFAULT_CLASS_CTOR(className);\
-	DEFINE_DRIVEN_CLASS_IMP_END()
+	DEFINE_DERIVED_CLASS_IMP_END()
 
 
 //------------------------------------------------------------------------------

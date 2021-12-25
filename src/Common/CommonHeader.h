@@ -26,6 +26,7 @@
 namespace fs = std::filesystem;
 
 using String = std::string;
+using WString = std::wstring;
 
 template<typename T>
 using SharedPtr = std::shared_ptr<T>;

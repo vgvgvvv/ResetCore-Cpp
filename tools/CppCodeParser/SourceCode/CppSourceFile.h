@@ -6,19 +6,18 @@
 class CppCodeParser_API CppSourceFile
 {
 public:
-    CppSourceFile(const std::string& InFilePath)
+    CppSourceFile(const String& InFilePath)
         : FilePath(InFilePath)
+		, Content()
     {
         Parse();
     }
 
 private:
 
-    void Parse()
-    {
-	    // TODO
-    }
+    void Parse();
 
 public:
-	std::string FilePath;
+	String FilePath;
+    WString Content;
 };

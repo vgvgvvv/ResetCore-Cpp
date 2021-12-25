@@ -8,5 +8,6 @@
 namespace CommonLib
 {
 	ResetCore_CommonLib_API std::string ReadFileIntoString(const std::string& path);
+	ResetCore_CommonLib_API std::wstring ReadFileIntoWString(const std::string& path);
 	ResetCore_CommonLib_API void SaveStringIntoFile(const std::string& content, const std::string& path);
 }

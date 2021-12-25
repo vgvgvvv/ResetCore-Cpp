@@ -3,13 +3,13 @@
 #include <memory>
 #include <unordered_map>
 
-#include "ResetCore_Framework_API.h"
+#include "ResetCore_CommonLib_API.h"
 #include "Singleton.h"
 
 class Type;
 class Class;
 
-class ResetCore_Framework_API ClassContext
+class ResetCore_CommonLib_API ClassContext
 {
 	DEFINE_SINGLETON(ClassContext)
 public:

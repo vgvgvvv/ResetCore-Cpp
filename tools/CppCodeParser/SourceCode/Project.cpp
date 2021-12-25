@@ -8,7 +8,7 @@ void CppProject::Load(const std::string& RootPath)
 {
 	if(!fs::exists(RootPath))
 	{
-		RE_LOG_ERROR(__FILE__, "Project Path {0} Not Exist!!", RootPath.c_str());
+		RE_LOG_ERROR("CppProject::Load", "Project Path {0} Not Exist!!", RootPath.c_str());
 		return;
 	}
 	Vector<DirectoryEntry> TargetJsons;
@@ -27,7 +27,7 @@ void CppProject::Load(const std::string& RootPath)
 void CppProject::AddModuleToCppModule(const DirectoryEntry& FileEntry)
 {
     auto FilePath = FileEntry.path().c_str();
-	RE_LOG_INFO(__FILE__, "Load Module File : {0}", FileEntry.path().filename().string().c_str())
+	RE_LOG_INFO("CppProject::AddModuleToCppModule", "Load Module File : {0}", FileEntry.path().filename().string().c_str())
 	auto Module = std::make_shared<CppModule>();
 
 	std::ifstream inputFile(FilePath);
@@ -42,7 +42,7 @@ void CppProject::AddModuleToCppModule(const DirectoryEntry& FileEntry)
 
     if(Module->ModuleType == ModuleMode::NONE)
     {
-        RE_LOG_ERROR(__FILE__, "Load Module File Error, Mode String Is Invalid {0}", ModeStr.c_str())
+        RE_LOG_ERROR("CppProject::AddModuleToCppModule", "Load Module File Error, Mode String Is Invalid {0}", ModeStr.c_str())
         return;
     }
 

@@ -6,7 +6,7 @@
 class CppCodeParser_API CppSourceFile
 {
 public:
-    CppSourceFile(const String& InFilePath)
+    CppSourceFile(const AString& InFilePath)
         : FilePath(InFilePath)
 		, Content()
     {
@@ -18,6 +18,6 @@ private:
     void Parse();
 
 public:
-	String FilePath;
-    WString Content;
+	AString FilePath;
+    AString Content;
 };

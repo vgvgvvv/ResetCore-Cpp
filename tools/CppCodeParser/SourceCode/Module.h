@@ -16,7 +16,7 @@ enum class ModuleMode
 	MAX = STATIC_AND_SHARED
 };
 
-CppCodeParser_API ModuleMode ModuleModeFromString(const String& InModeStr);
+CppCodeParser_API ModuleMode ModuleModeFromString(const AString& InModeStr);
 
 struct ModuleOption
 {
@@ -24,7 +24,7 @@ struct ModuleOption
 	std::string OptionValue;
 };
 
-ModuleOption OptionFromString(const String& InOptionStr);
+ModuleOption OptionFromString(const AString& InOptionStr);
 
 struct ModuleDefine
 {
@@ -33,7 +33,7 @@ struct ModuleDefine
 	
 };
 
-ModuleDefine DefineFromString(const String& InDefineStr);
+ModuleDefine DefineFromString(const AString& InDefineStr);
 
 struct CppCodeParser_API CppModule
 {

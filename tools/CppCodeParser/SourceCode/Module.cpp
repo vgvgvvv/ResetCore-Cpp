@@ -25,7 +25,7 @@ ModuleMode ModuleModeFromString(const std::string& InModeStr)
 	return ModuleMode::NONE;
 }
 
-ModuleOption OptionFromString(const String& InOptionStr)
+ModuleOption OptionFromString(const AString& InOptionStr)
 {
 	ModuleOption Option;
 	auto Strs = StringEx::Split(InOptionStr, "=");
@@ -37,7 +37,7 @@ ModuleOption OptionFromString(const String& InOptionStr)
 	return Option;
 }
 
-ModuleDefine DefineFromString(const String& InDefineStr)
+ModuleDefine DefineFromString(const AString& InDefineStr)
 {
 	ModuleDefine Define;
 	auto Strs = StringEx::Split(InDefineStr, "=");

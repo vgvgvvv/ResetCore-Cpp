@@ -21,5 +21,5 @@ private:
 
 private:
 
-	Map<String, std::shared_ptr<CppModule>> ModuleCache;
+	Map<AString, std::shared_ptr<CppModule>> ModuleCache;
 };

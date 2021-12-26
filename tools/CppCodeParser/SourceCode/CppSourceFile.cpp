@@ -7,5 +7,5 @@ void CppSourceFile::Parse()
 		RE_LOG_ERROR("CppSourceFile::Parse", "Cannot Find Cpp Source Path {0}", FilePath.c_str())
 		return;
 	}
-	Content = CommonLib::ReadFileIntoWString(FilePath);
+	Content = CommonLib::ReadFileIntoString(FilePath);
 }

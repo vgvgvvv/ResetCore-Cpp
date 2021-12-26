@@ -6,6 +6,7 @@
 #include "Platform/Platform.h"
 #include "Misc/StringEx.h"
 #include "Misc/Path.h"
+#include "Misc/Memory.h"
 
 #include "FileSystem/File.h"
 #include "FileSystem/Directory.h"
@@ -25,7 +26,7 @@
 
 namespace fs = std::filesystem;
 
-using String = std::string;
+using AString = std::string;
 using WString = std::wstring;
 
 template<typename T>

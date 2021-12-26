@@ -446,8 +446,3 @@ SharedPtr<CppToken> BaseParser::GetSymbol()
 	UngetToken(Token);
 	return nullptr;
 }
-
-bool BaseParser::CompileDeclaration(SharedPtr<CppToken> Token)
-{
-	return true;
-}

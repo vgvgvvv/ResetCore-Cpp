@@ -75,9 +75,6 @@ public:
 	// void RequireConstInt(const TCHAR* Match, const TCHAR* Tag);
 	// void RequireAnyConstInt(const TCHAR* Tag);
 
-
-	bool CompileDeclaration(SharedPtr<CppToken> Token);
-
 protected:
 
 	// Input text

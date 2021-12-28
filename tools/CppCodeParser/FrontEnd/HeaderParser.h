@@ -1,14 +1,13 @@
 #pragma once
 
+#include "CppFileParser.h"
 
-#include "BaseParser.h"
 
-
-class CppCodeParser_API HeaderParser : public BaseParser
+class CppCodeParser_API HeaderParser : public CppFileParser
 {
-	DEFINE_DERIVED_CLASS(HeaderParser, BaseParser)
+	DEFINE_DERIVED_CLASS(HeaderParser, CppFileParser)
+
 public:
 
-	bool CompileDeclaration(SharedPtr<CppToken> Token);
 
 };

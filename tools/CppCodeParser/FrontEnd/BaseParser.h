@@ -10,6 +10,9 @@ class CppCodeParser_API BaseParser
 	DEFINE_CLASS(BaseParser)
 public:
 
+	virtual ~BaseParser() = default;
+
+
 	void InitParserSource(const char* SourceBuffer);
 
 	// Basic Operations

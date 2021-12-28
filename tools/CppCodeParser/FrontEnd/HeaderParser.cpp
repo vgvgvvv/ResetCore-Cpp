@@ -1,8 +1,4 @@
 #include "HeaderParser.h"
 
-DEFINE_DERIVED_CLASS_IMP(HeaderParser, BaseParser)
+DEFINE_DERIVED_CLASS_IMP(HeaderParser, CppFileParser)
 
-bool HeaderParser::CompileDeclaration(SharedPtr<CppToken> Token)
-{
-	return true;
-}

@@ -14,6 +14,8 @@ public:
 
 private:
 
+	bool CompileNamespaceDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token);
+
 	bool CompileClassDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token);
 
 	bool CompileClassFunctionDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token);

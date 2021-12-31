@@ -4,13 +4,20 @@
 #include "CppCodeParser_API.h"
 
 
+enum class ScopeType;
 class BaseScope;
 
 class NestInfo
 {
 public:
 
-    Queue<SharedPtr<BaseScope>> ScopeInfo;
+    SharedPtr<BaseScope> GetCurrentScope();
+
+    void PushScope(SharedPtr<BaseScope> Scope);
+
+    SharedPtr<BaseScope> PopScope();
+
+    Stack<SharedPtr<BaseScope>> ScopeInfo;
 };
 
 class CppCodeParser_API CppSourceFile

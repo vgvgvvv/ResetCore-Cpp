@@ -21,6 +21,7 @@
 #include <map>
 #include <set>
 #include <queue>
+#include <stack>
 #include <iostream>
 #include <memory>
 #include <functional>
@@ -44,6 +45,9 @@ using Set = std::set<T>;
 
 template<typename T>
 using Queue = std::queue<T>;
+
+template<typename T>
+using Stack = std::stack<T>;
 
 template<typename T>
 using Function = std::function<T>;

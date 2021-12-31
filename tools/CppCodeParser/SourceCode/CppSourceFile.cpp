@@ -2,6 +2,24 @@
 
 #include "FrontEnd/CppSourceParser.h"
 #include "FrontEnd/HeaderParser.h"
+#include "Scopes/BaseScope.h"
+
+SharedPtr<BaseScope> NestInfo::GetCurrentScope()
+{
+	return ScopeInfo.top();
+}
+
+void NestInfo::PushScope(SharedPtr<BaseScope> Scope)
+{
+	ScopeInfo.push(Scope);
+}
+
+SharedPtr<BaseScope> NestInfo::PopScope()
+{
+	SharedPtr<BaseScope> result = ScopeInfo.top();
+	ScopeInfo.pop();
+	return result;
+}
 
 void CppSourceFile::Parse()
 {

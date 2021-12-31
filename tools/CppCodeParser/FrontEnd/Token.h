@@ -35,6 +35,7 @@ public:
 	enum { NAME_SIZE = 1024 };
 	enum { MAX_STRING_CONST_SIZE = 1024 };
 
+private:
 	// Token Type
 	CppTokenType TokenType = CppTokenType::None;
 
@@ -44,8 +45,6 @@ public:
 	// Token Identifier String
 	TCHAR Identifier[NAME_SIZE];
 
-	
-	
 public:
 	// Storage for Const
 	CppTokenConstType ConstType = CppTokenConstType::None;
@@ -69,6 +68,16 @@ public:
 	AString GetTokenName() const;
 
 	AString GetConstantValue() const;
+
+	CppTokenType GetTokenType() const
+	{
+		return TokenType;
+	}
+
+	CppTokenConstType GetConstType() const
+	{
+		return ConstType;
+	}
 
 	// match
 	bool Matches(const char Ch) const

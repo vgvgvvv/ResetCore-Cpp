@@ -12,4 +12,16 @@ public:
 
 	virtual bool CompileDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token);
 
+private:
+
+	bool CompileClassDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token);
+
+	bool CompileClassFunctionDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token);
+
+	bool CompileClassMemberDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token);
+
+	bool CompileGlobalFunctionDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token);
+
+	bool CompileGlobalMemberDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token);
+
 };

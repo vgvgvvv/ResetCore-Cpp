@@ -20,6 +20,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <queue>
 #include <iostream>
 #include <memory>
 #include <functional>
@@ -40,6 +41,9 @@ using Map = std::map<K, V>;
 
 template<typename T>
 using Set = std::set<T>;
+
+template<typename T>
+using Queue = std::queue<T>;
 
 template<typename T>
 using Function = std::function<T>;

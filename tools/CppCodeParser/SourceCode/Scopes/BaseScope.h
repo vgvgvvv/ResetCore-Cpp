@@ -4,7 +4,12 @@
 
 enum class ScopeType
 {
-	
+	None,
+	Global,
+	Namespace,
+	Enum,
+	Function,
+	Class
 };
 
 class BaseScope

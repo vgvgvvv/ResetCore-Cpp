@@ -13,7 +13,7 @@ public:
 
     SharedPtr<BaseScope> GetCurrentScope();
 
-    void PushScope(SharedPtr<BaseScope> Scope);
+    void PushScope(const Class* Type);
 
     SharedPtr<BaseScope> PopScope();
 

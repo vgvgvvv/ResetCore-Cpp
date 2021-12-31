@@ -166,7 +166,7 @@ public:
 	bool IsA(const Class* targetClass) const
     {
         const auto baseClass = BaseClass();
-        if (baseClass == targetClass)
+        if (*baseClass == *targetClass)
         {
             return true;
         }

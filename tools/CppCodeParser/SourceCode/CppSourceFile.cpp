@@ -3,15 +3,21 @@
 #include "FrontEnd/CppSourceParser.h"
 #include "FrontEnd/HeaderParser.h"
 #include "Scopes/BaseScope.h"
+#include "Scopes/ClassScope.h"
+#include "Scopes/EnumScope.h"
+#include "Scopes/FunctionScope.h"
+#include "Scopes/GlobalScope.h"
+#include "Scopes/NamespaceScope.h"
 
 SharedPtr<BaseScope> NestInfo::GetCurrentScope()
 {
 	return ScopeInfo.top();
 }
 
-void NestInfo::PushScope(SharedPtr<BaseScope> Scope)
+void NestInfo::PushScope(const Class* Type)
 {
-	ScopeInfo.push(Scope);
+	RE_ASSERT(Type != nullptr && Type->IsA(BaseScope::StaticClass()))
+	ScopeInfo.push(Type->Create<BaseScope>());
 }
 
 SharedPtr<BaseScope> NestInfo::PopScope()
@@ -50,6 +56,8 @@ void CppSourceFile::Parse()
 
 	Parser->InitParserSource(Content.c_str());
 
+	NestInfo.PushScope(GlobalScope::StaticClass());
+
 	while(true)
 	{
 		auto Token = Parser->GetToken();
@@ -59,4 +67,6 @@ void CppSourceFile::Parse()
 		}
 		Parser->CompileDeclaration(*this, Token);
 	}
+
+	NestInfo.PopScope();
 }

@@ -3,22 +3,19 @@
 #include "FieldInfo.h"
 
 
-class MethodInfo
+class MethodInfo : public MemberInfo
 {
 public:
 
 	MethodInfo(std::string InMethodName,
+				MemberAccessType InMemberAccessType,
+				MemberFlag InMemberFlag,
 	           FieldInfo InReturnParam, 
 	           std::vector<FieldInfo> InMethodParamInfos)
-		: MethodName(std::move(InMethodName))
+		: MemberInfo(std::move(InMethodName), InMemberAccessType, InMemberFlag)
 		, ReturnField(std::move(InReturnParam))
 		, MethodParamInfos(std::move(InMethodParamInfos))
 	{
-	}
-
-	const std::string& GetName() const
-	{
-		return MethodName;
 	}
 
 	const FieldInfo& GetReturnParam() const
@@ -32,7 +29,6 @@ public:
 	}
 
 private:
-	const std::string MethodName;
 	const FieldInfo ReturnField;
 	const std::vector<FieldInfo> MethodParamInfos;
 };

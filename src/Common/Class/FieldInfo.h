@@ -1,23 +1,26 @@
 #pragma once
 #include "Class.h"
+#include "MemberInfo.h"
 
 
-class FieldInfo
+enum class FieldOwnerType
+{
+	None,
+	ClassMember,
+	Global
+};
+
+class FieldInfo : public MemberInfo
 {
 public:
 
-	enum class FieldOwnerType
-	{
-		None,
-		ClassMember,
-		Global
-	};
-
-	FieldInfo(const Type* InFieldType,
-	          std::string InFieldName, 
+	FieldInfo(std::string InFieldName,
+		MemberAccessType InMemberAccessType,
+		MemberFlag InMemberFlag,
+		const Type* InFieldType,
 		FieldOwnerType InOwnerType)
-		: FieldType(InFieldType)
-		, FieldName(std::move(InFieldName))
+		: MemberInfo(std::move(InFieldName), InMemberAccessType, InMemberFlag)
+		, FieldType(InFieldType)
 		, OwnerType(InOwnerType)
 	{
 	}
@@ -27,11 +30,6 @@ public:
 		return FieldType;
 	}
 
-	const std::string& GetName() const
-	{
-		return FieldName;
-	}
-
 	const FieldOwnerType GetOwnerType() const
 	{
 		return OwnerType;
@@ -39,6 +37,5 @@ public:
 
 private:
 	const Type* FieldType = nullptr;
-	const std::string FieldName;
 	const FieldOwnerType OwnerType = FieldOwnerType::None;
 };

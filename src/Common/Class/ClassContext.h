@@ -13,7 +13,7 @@ class ResetCore_CommonLib_API ClassContext
 {
 	DEFINE_SINGLETON(ClassContext)
 public:
-	void RegisterMap(const std::string& name, Class* type);
+	void RegisterClassMap(const std::string& name, Class* type);
 
 	Class* GetClass(const std::string& name);
 
@@ -27,8 +27,13 @@ public:
 		std::shared_ptr<void> result = Create(name);
 		return std::static_pointer_cast<T>(result);
 	}
+
+	void RegisterTypeMap(const std::string& name, Type* type);
+
+	Type* GetType(const std::string& name);
 	
 private:
-	std::unordered_map<std::string, Class*> typeMap;
+	std::unordered_map<std::string, Class*> ClassMap;
+	std::unordered_map<std::string, Type*> TypeMap;
 };
 

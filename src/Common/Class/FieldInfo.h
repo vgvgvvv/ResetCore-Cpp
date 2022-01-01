@@ -2,7 +2,7 @@
 #include "Class.h"
 
 
-class Fieldinfo
+class FieldInfo
 {
 public:
 

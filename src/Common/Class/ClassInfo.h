@@ -1,6 +1,11 @@
 #pragma once
 #include <string>
 #include "Class.h"
+#include "EnumType.h"
+#include "MethodInfo.h"
+#include "FieldInfo.h"
+#include "BaseTypes.h"
+#include "ClassStorage.h"
 
 //------------------------------------------------------------------------------
 // 反射类相关初始化宏
@@ -30,6 +35,7 @@ private:\
 	Class className::selfClass(sizeof(className), \
 		nullptr, \
 		#className, \
+		[](){ return GetClassStorage<className>(); }, \
 		flag, \
 		[](Class* self){
 
@@ -68,6 +74,7 @@ private:\
 	Class className::selfClass(sizeof(className), \
 		baseClassName::StaticClass(), \
 		#className, \
+		[](){ return GetClassStorage<className>(); }, \
 		flag, \
 		[](Class* self){ \
 			

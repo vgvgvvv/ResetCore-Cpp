@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <utility>
 #include "ClassContext.h"
 
 template<class T>
@@ -57,12 +58,14 @@ class Type
 {
 
 public:
-    Type(
+	virtual ~Type() = default;
+
+	Type(
         int size,
         char const* name) noexcept
-        : m_size(size)
-        , m_hash(ClassDetail::Hash(name))
-        , m_name(name)
+        : TypeSize(size)
+        , TypeHash(ClassDetail::Hash(name))
+        , TypeName(name)
     {
         
     }
@@ -72,25 +75,27 @@ public:
     /* --------------------------------------------------------------------- */
     virtual bool IsClass() const noexcept { return false; };
 
+    virtual bool IsEnum() const noexcept { return false; }
+
     /* --------------------------------------------------------------------- */
     /* Access                                                                */
     /* --------------------------------------------------------------------- */
     uint64_t
         Size() const noexcept
     {
-        return m_size;
+        return TypeSize;
     }
 
     uint64_t
         Hash() const noexcept
     {
-        return m_hash;
+        return TypeHash;
     }
 
     char const*
         Name() const noexcept
     {
-        return m_name;
+        return TypeName;
     }
 
     /* --------------------------------------------------------------------- */
@@ -99,7 +104,7 @@ public:
     bool
         operator==(Type const& other) const noexcept
     {
-        return m_hash == other.m_hash;
+        return TypeHash == other.TypeHash;
     }
 
     bool
@@ -110,42 +115,54 @@ public:
 
 
 protected:
-    uint64_t m_size;
-    uint64_t m_hash;
-    char const* m_name;
+    uint64_t TypeSize;
+    uint64_t TypeHash;
+    char const* TypeName;
 };
+
+class ClassStorage;
+
+template<typename T>
+const ClassStorage* GetClassStorage()
+{
+    return nullptr;
+}
 
 class Class : public Type
 {
 
 public:
     Class(
-        int size,
-        const Class* baseClass,
-        char const* name, 
-        ClassFlag flag = ClassFlag::None) noexcept
-        : Type(size, name)
-        , m_baseClass(baseClass)
-		, classFlag(flag)
+        int InSize,
+        const Class* InBaseClass,
+        char const* InName,
+        std::function<const ClassStorage* ()> InGetClassStorageFunc,
+        ClassFlag InFlag = ClassFlag::None) noexcept
+        : Type(InSize, InName)
+        , BaseClass(InBaseClass)
+        , Flag(InFlag)
+        , GetClassStorageFunc(std::move(InGetClassStorageFunc))
     {
-        ClassContext::Get().RegisterMap(name, this);
-        defined = true;
+        ClassContext::Get().RegisterClassMap(InName, this);
+        Defined = true;
     }
 
 	template<class Lambda>
     Class(
-        int size,
-        const Class* baseClass,
-        char const* name,
-        ClassFlag flag, 
-        Lambda&& ctor) noexcept
-        : Type(size, name)
-        , m_baseClass(baseClass)
-        , classFlag(flag)
+        int InSize,
+        const Class* InBaseClass,
+        char const* InName,
+        std::function<const ClassStorage* ()> InGetClassStorageFunc,
+        ClassFlag InFlag, 
+        Lambda&& InCtor) noexcept
+        : Type(InSize, InName)
+        , BaseClass(InBaseClass)
+		, Flag(InFlag) 
+        , GetClassStorageFunc(std::move(InGetClassStorageFunc))
     {
-        ctor(this);
-        ClassContext::Get().RegisterMap(name, this);
-        defined = true;
+        InCtor(this);
+        ClassContext::Get().RegisterClassMap(InName, this);
+        Defined = true;
     }
 
     /* --------------------------------------------------------------------- */
@@ -157,15 +174,19 @@ public:
     /* --------------------------------------------------------------------- */
     /* Access                                                                */
     /* --------------------------------------------------------------------- */
-    Class const*
-        BaseClass() const noexcept
+    Class const* GetBaseClass() const noexcept
     {
-        return m_baseClass;
+        return BaseClass;
+    }
+
+    const ClassStorage* GetClassStorage() const noexcept
+    {
+        return GetClassStorageFunc();
     }
 
 	bool IsA(const Class* targetClass) const
     {
-        const auto baseClass = BaseClass();
+        const auto baseClass = GetBaseClass();
         if (*baseClass == *targetClass)
         {
             return true;
@@ -179,33 +200,34 @@ public:
 
 	bool HasFlag(ClassFlag flag) const
     {
-        return (int)classFlag & (int)flag;
+        return (int)Flag & (int)flag;
     }
 
     std::shared_ptr<void> Create() const
     {
-        return ctor();
+        return Ctor();
     }
 
 	template<class T>
     std::shared_ptr<T> Create() const
     {
-        return std::static_pointer_cast<T>(ctor());
+        return std::static_pointer_cast<T>(Ctor());
     }
 
 public:
 
 	void SetCtor(std::function<std::shared_ptr<void>()>&& newCtor)
 	{
-        ctor = newCtor;
+        Ctor = newCtor;
 	}
 
 protected:
-    const Class* m_baseClass;
-    ClassFlag classFlag;
-    std::function<std::shared_ptr<void>()> ctor;
+    const Class* BaseClass;
+    ClassFlag Flag;
+    std::function<std::shared_ptr<void>()> Ctor;
+    std::function<const ClassStorage* ()> GetClassStorageFunc;
     // 已经定义完毕 不允许再次修改
-	bool defined;
+	bool Defined;
 };
 
 
@@ -217,19 +239,21 @@ class ClassTemplate : public Class
 {
 public:
     ClassTemplate(
-        int size,
-        const Class* baseClass,
-        char const* name,
-        ClassFlag flag,
-        TemplateArgument* templateArgs,
-        TemplateArgument* templateArgsEnd) noexcept
+        int InSize,
+        const Class* InBaseClass,
+        char const* Name,
+        std::function<const ClassStorage* ()> InGetClassStorageFunc,
+        ClassFlag Flag,
+        TemplateArgument* TemplateArgs,
+        TemplateArgument* TemplateArgsEnd) noexcept
         : Class(
-            size,
-            baseClass,
-            name,
-            flag)
-        , m_templateArgs(templateArgs)
-        , m_templateArgsEnd(templateArgsEnd)
+            InSize,
+            InBaseClass,
+            Name,
+            std::move(InGetClassStorageFunc),
+            Flag)
+        , m_templateArgs(TemplateArgs)
+        , m_templateArgsEnd(TemplateArgsEnd)
     {}
 
     template<class Lambda>

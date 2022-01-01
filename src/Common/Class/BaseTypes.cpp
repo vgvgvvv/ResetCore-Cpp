@@ -6,32 +6,32 @@
 #define STRINGIFY(s) XSTRINGIFY(s)
 
 /* void is special. */
+struct Void : public Type {
+    using Type::Type;
+    virtual std::string ToString(void const* instance) const noexcept
+    {
+        return fmt::format("void");
+    }
+};
+static Void voidtype{ 0, "void" };
 Type const* GetTypeImpl(TypeTag<void>) noexcept
 {
-    struct Void : public Type {
-        using Type::Type;
-        virtual std::string ToString(void const* instance) const noexcept
-        {
-            return fmt::format("void");
-        }
-    };
-    static Void type{ 0, "void" };
-    return &type;
+    return &voidtype;
 }
 
 #define DEFINE_GET_TYPE(T, NAME, FMT) \
+struct NAME : public Type { \
+\
+    using Type::Type;  \
+    virtual std::string ToString(void const* instance) const noexcept \
+    { \
+        return fmt::format(FMT, *(T const*)instance); \
+    } \
+}; \
+static NAME NAME##type{ sizeof(T), STRINGIFY(T),}; \
 Type const* GetTypeImpl(TypeTag<T>) noexcept \
 { \
-	struct NAME : public Type { \
-    \
-        using Type::Type;  \
-        virtual std::string ToString(void const* instance) const noexcept \
-	    { \
-            return fmt::format(FMT, *(T const*)instance); \
-	    } \
-	}; \
-	static NAME type{ sizeof(T), STRINGIFY(T),}; \
-	return &type; \
+	return &NAME##type; \
 }
 
 DEFINE_GET_TYPE(bool, Bool, "%d")                             

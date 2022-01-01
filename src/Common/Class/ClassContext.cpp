@@ -7,23 +7,23 @@ void ClassContext::InitSingleton()
 {
 }
 
-void ClassContext::RegisterMap(const std::string& name, Class* type)
+void ClassContext::RegisterClassMap(const std::string& name, Class* type)
 {
-	typeMap.insert(std::make_pair(name, type));
+	ClassMap.insert(std::make_pair(name, type));
 }
 
 Class* ClassContext::GetClass(const std::string& name)
 {
-	if(typeMap.contains(name))
+	if(ClassMap.contains(name))
 	{
-		return typeMap.at(name);
+		return ClassMap.at(name);
 	}
 	return nullptr;
 }
 
 void ClassContext::GetClassOf(const Class* type, std::vector<Class*>* out)
 {
-	for (auto& pair : typeMap)
+	for (auto& pair : ClassMap)
 	{
 		if(ClassLib::IsA(pair.second, type))
 		{
@@ -42,3 +42,16 @@ std::shared_ptr<void> ClassContext::Create(const std::string& name)
 	return  nullptr;
 }
 
+void ClassContext::RegisterTypeMap(const std::string& name, Type* type)
+{
+	TypeMap.insert(std::make_pair(name, type));
+}
+
+Type* ClassContext::GetType(const std::string& name)
+{
+	if (TypeMap.contains(name))
+	{
+		return TypeMap.at(name);
+	}
+	return GetClass(name);
+}

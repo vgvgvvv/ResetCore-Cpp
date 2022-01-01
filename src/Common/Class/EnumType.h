@@ -33,11 +33,11 @@ private:
 
 
 
-class EnumType final : public Type
+class Enum final : public Type
 {
 public:
 
-	EnumType(int InSize,
+	Enum(int InSize,
 		char const* InName, 
 		bool InIsEnumClass, 
 		std::vector<EnumFieldInfo> InFields) noexcept

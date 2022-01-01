@@ -1,20 +1,21 @@
+#pragma once
 #include "Class.h"
 
 
-extern Type const* GetTypeImpl(TypeTag<void>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<bool>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<char>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<short>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<long>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<long long>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<float>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<double>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<long double>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<unsigned char>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<unsigned short>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<unsigned int>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<unsigned long>) noexcept;
-extern Type const* GetTypeImpl(TypeTag<unsigned long long>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<void>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<bool>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<char>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<short>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<long>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<long long>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<float>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<double>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<long double>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<unsigned char>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<unsigned short>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<unsigned int>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<unsigned long>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<unsigned long long>) noexcept;
 
 
 template<typename T>

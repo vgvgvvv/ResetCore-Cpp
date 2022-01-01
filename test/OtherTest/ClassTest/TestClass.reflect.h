@@ -1,5 +1,6 @@
 #pragma once
 
+class TestClass;
 
 namespace __ClassDetail
 {

@@ -7,6 +7,15 @@
 #include "BaseTypes.h"
 #include "ClassStorage.h"
 
+
+//------------------------------------------------------------------------------
+// 反射相关 TAG
+
+#define RE_CLASS(...)
+#define RE_FIELD(...)
+#define RE_ENUM(...)
+#define RE_FUNCTION(...)
+
 //------------------------------------------------------------------------------
 // 反射类相关初始化宏
 #define SET_DEFAULT_CLASS_CTOR(className) \

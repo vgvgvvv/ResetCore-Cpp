@@ -1,12 +1,7 @@
 #include "CommonHeader.h"
 
 
-class TestClass
-{
-	DEFINE_CLASS(TestClass)
-};
 
-DEFINE_CLASS_IMP(TestClass)
 
 int main()
 {

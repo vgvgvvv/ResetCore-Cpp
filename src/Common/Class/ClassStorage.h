@@ -7,11 +7,18 @@ class ClassStorage
 {
 public:
 
-	ClassStorage(std::map<std::string, FieldInfo> InFieldInfos, 
-		std::map<std::string, MethodInfo> InMethodInfos)
-		: FieldInfos(std::move(InFieldInfos))
-		, MethodInfos(std::move(InMethodInfos))
+	ClassStorage(const std::vector<FieldInfo>& InFieldInfos, 
+		const std::vector<MethodInfo>& InMethodInfos)
 	{
+		for (const FieldInfo& FieldInfo : InFieldInfos)
+		{
+			FieldInfos.insert(std::make_pair(FieldInfo.GetName(), FieldInfo));
+		}
+
+		for(const MethodInfo& MethodInfo : InMethodInfos)
+		{
+			MethodInfos.insert(std::make_pair(MethodInfo.GetName(), MethodInfo));
+		}
 	}
 
 	const FieldInfo* GetField(const std::string& Name) const

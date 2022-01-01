@@ -122,10 +122,23 @@ protected:
 
 class ClassStorage;
 
+
+namespace __ClassDetail
+{
+    template<typename T>
+    struct GetClassStorageWrapper
+    {
+        static const ClassStorage* GetClassStorage()
+        {
+            return nullptr;
+        }
+    };
+}
+
 template<typename T>
 const ClassStorage* GetClassStorage()
 {
-    return nullptr;
+    return __ClassDetail::GetClassStorageWrapper<T>::GetClassStorage();
 }
 
 class Class : public Type

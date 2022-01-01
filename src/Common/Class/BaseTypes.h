@@ -6,6 +6,7 @@ ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<void>) noexcept;
 ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<bool>) noexcept;
 ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<char>) noexcept;
 ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<short>) noexcept;
+ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<int>) noexcept;
 ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<long>) noexcept;
 ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<long long>) noexcept;
 ResetCore_CommonLib_API extern Type const* GetTypeImpl(TypeTag<float>) noexcept;

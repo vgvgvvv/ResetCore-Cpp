@@ -35,6 +35,11 @@ public:
 		return OwnerType;
 	}
 
+	bool IsField() override
+	{
+		return true;
+	}
+
 private:
 	const Type* FieldType = nullptr;
 	const FieldOwnerType OwnerType = FieldOwnerType::None;

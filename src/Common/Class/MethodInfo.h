@@ -28,6 +28,11 @@ public:
 		return MethodParamInfos;
 	}
 
+	bool IsMethod() override
+	{
+		return true;
+	}
+
 private:
 	const FieldInfo ReturnField;
 	const std::vector<FieldInfo> MethodParamInfos;

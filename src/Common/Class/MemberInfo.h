@@ -45,6 +45,16 @@ public:
 		return Flag;
 	}
 
+	virtual bool IsField()
+	{
+		return false;
+	}
+
+	virtual bool IsMethod()
+	{
+		return false;
+	}
+
 private:
 	const std::string Name;
 	const MemberAccessType AccessType;

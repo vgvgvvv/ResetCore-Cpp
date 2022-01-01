@@ -1,7 +1,5 @@
 #include "CommonHeader.h"
-
-
-
+#include "TestClass.h"
 
 int main()
 {

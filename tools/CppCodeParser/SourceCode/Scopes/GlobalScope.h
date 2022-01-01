@@ -4,4 +4,6 @@
 class GlobalScope : public BaseScope
 {
 	DEFINE_DERIVED_CLASS(GlobalScope, BaseScope)
+public:
+
 };

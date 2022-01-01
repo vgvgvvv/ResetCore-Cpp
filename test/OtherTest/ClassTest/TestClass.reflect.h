@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Class/BaseTypes.h"
+#include "Class/ClassStorage.h"
+
 class TestClass;
 
 namespace __ClassDetail
@@ -10,7 +13,11 @@ namespace __ClassDetail
         static const ClassStorage* GetClassStorage()
         {
             std::vector<FieldInfo> FieldInfos;
-            FieldInfos.emplace_back(FieldInfo("IntValue", MemberAccessType::Public, MemberFlag::None, GetType<int>(), FieldOwnerType::ClassMember));
+            FieldInfos.emplace_back(FieldInfo("IntValue"
+                , MemberAccessType::Public
+                , MemberFlag::None
+                , MemberOwnerType::ClassMember
+                , GetType<int>()));
 
             std::vector<MethodInfo> MethodInfos;
 

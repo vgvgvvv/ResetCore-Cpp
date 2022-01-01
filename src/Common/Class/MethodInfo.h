@@ -7,12 +7,16 @@ class MethodInfo : public MemberInfo
 {
 public:
 
-	MethodInfo(std::string InMethodName,
-				MemberAccessType InMemberAccessType,
-				MemberFlag InMemberFlag,
-	           FieldInfo InReturnParam, 
-	           std::vector<FieldInfo> InMethodParamInfos)
-		: MemberInfo(std::move(InMethodName), InMemberAccessType, InMemberFlag)
+	MethodInfo(std::string InMethodName
+		, MemberAccessType InMemberAccessType
+		, MemberFlag InMemberFlag
+		, MemberOwnerType InOwnerType
+		, FieldInfo InReturnParam
+		, std::vector<FieldInfo> InMethodParamInfos)
+		: MemberInfo(std::move(InMethodName)
+			, InMemberAccessType
+			, InMemberFlag
+			, InOwnerType)
 		, ReturnField(std::move(InReturnParam))
 		, MethodParamInfos(std::move(InMethodParamInfos))
 	{

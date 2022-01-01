@@ -2,6 +2,7 @@
 
 enum class MemberAccessType
 {
+	None,
 	Public,
 	Protected,
 	Private
@@ -16,16 +17,27 @@ enum class MemberFlag
 	Overrided = 1 << 3
 };
 
+enum class MemberOwnerType
+{
+	None,
+	ClassMember,
+	Global
+};
+
+
 class MemberInfo
 {
 public:
+	virtual ~MemberInfo() = default;
 
-	MemberInfo(std::string&& InName, 
-		MemberAccessType InAccessType,
-		MemberFlag InFlag)
+	MemberInfo(std::string&& InName
+	           , MemberAccessType InAccessType
+	           , MemberFlag InFlag
+	           , MemberOwnerType InOwnerType)
 		: Name(std::move(Name))
 		, AccessType(InAccessType)
 		, Flag(InFlag)
+		, OwnerType(InOwnerType)
 	{
 	}
 
@@ -45,6 +57,11 @@ public:
 		return Flag;
 	}
 
+	const MemberOwnerType GetOwnerType() const
+	{
+		return OwnerType;
+	}
+
 	virtual bool IsField()
 	{
 		return false;
@@ -59,4 +76,5 @@ private:
 	const std::string Name;
 	const MemberAccessType AccessType;
 	const MemberFlag Flag;
+	const MemberOwnerType OwnerType;
 };

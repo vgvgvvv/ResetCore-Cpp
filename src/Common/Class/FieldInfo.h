@@ -3,25 +3,21 @@
 #include "MemberInfo.h"
 
 
-enum class FieldOwnerType
-{
-	None,
-	ClassMember,
-	Global
-};
 
 class FieldInfo : public MemberInfo
 {
 public:
 
-	FieldInfo(std::string InFieldName,
-		MemberAccessType InMemberAccessType,
-		MemberFlag InMemberFlag,
-		const Type* InFieldType,
-		FieldOwnerType InOwnerType)
-		: MemberInfo(std::move(InFieldName), InMemberAccessType, InMemberFlag)
+	FieldInfo(std::string InFieldName
+		, MemberAccessType InMemberAccessType
+		, MemberFlag InMemberFlag
+		, MemberOwnerType InOwnerType
+		, const Type* InFieldType)
+		: MemberInfo(std::move(InFieldName)
+			, InMemberAccessType
+			, InMemberFlag
+			, InOwnerType)
 		, FieldType(InFieldType)
-		, OwnerType(InOwnerType)
 	{
 	}
 
@@ -30,10 +26,6 @@ public:
 		return FieldType;
 	}
 
-	const FieldOwnerType GetOwnerType() const
-	{
-		return OwnerType;
-	}
 
 	bool IsField() override
 	{
@@ -42,5 +34,4 @@ public:
 
 private:
 	const Type* FieldType = nullptr;
-	const FieldOwnerType OwnerType = FieldOwnerType::None;
 };

@@ -4,6 +4,8 @@
 #include "EnumType.h"
 #include "MethodInfo.h"
 #include "FieldInfo.h"
+#include "MemberInfo.h"
+#include "Namespace.h"
 #include "BaseTypes.h"
 #include "ClassStorage.h"
 

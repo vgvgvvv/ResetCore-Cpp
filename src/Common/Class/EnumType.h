@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include "CommonAssert.h"
+#include "Platform/Platform.h"
 #include "Class.h"
 
 
@@ -33,13 +34,13 @@ private:
 
 
 
-class Enum final : public Type
+class EnumType final : public Type
 {
 public:
 
-	Enum(int InSize,
-		char const* InName, 
-		bool InIsEnumClass, 
+	EnumType(int InSize,
+		char const* InName,
+		bool InIsEnumClass,
 		std::vector<EnumFieldInfo> InFields) noexcept
 		: Type(InSize, InName)
 		, IsEnumClass(InIsEnumClass)

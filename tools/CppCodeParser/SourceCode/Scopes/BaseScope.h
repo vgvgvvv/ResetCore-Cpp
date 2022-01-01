@@ -17,24 +17,31 @@ class BaseScope
 	DEFINE_CLASS(BaseScope)
 public:
 
-	virtual void AddNamespace()
+	virtual ~BaseScope() = default;
+
+	virtual void AddNamespace(SharedPtr<Namespace> InSpaceName)
 	{
 		RE_ASSERT_MSG(false, "Current Scope Not Support Add Namespace");
 	}
 
-	virtual void AddClass()
+	virtual void AddClass(SharedPtr<Class> InClass)
 	{
 		RE_ASSERT_MSG(false, "Current Scope Not Support Add Class");
 	}
 
-	virtual void AddFunction()
+	virtual void AddMethod(SharedPtr<MethodInfo> InMethodInfo)
 	{
-		RE_ASSERT_MSG(false, "Current Scope Not Support Add Function");
+		RE_ASSERT_MSG(false, "Current Scope Not Support Add MethodInfo");
 	}
 
-	virtual void AddMember()
+	virtual void AddField(SharedPtr<FieldInfo> InFieldInfo)
 	{
-		RE_ASSERT_MSG(false, "Current Scope Not Support Add Member");
+		RE_ASSERT_MSG(false, "Current Scope Not Support Add FieldInfo");
+	}
+
+	virtual void AddEnum(SharedPtr<EnumType> InEnumType)
+	{
+		RE_ASSERT_MSG(false, "Current Scope Not Support Add EnumType");
 	}
 
 };

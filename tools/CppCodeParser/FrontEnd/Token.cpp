@@ -15,7 +15,12 @@ void CppToken::InitToken()
 
 AString CppToken::GetTokenName() const
 {
-	return std::string(Identifier);
+	return AString(Identifier);
+}
+
+const TCHAR* CppToken::GetRawTokenName() const
+{
+	return Identifier;
 }
 
 AString CppToken::GetConstantValue() const

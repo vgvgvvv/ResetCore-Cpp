@@ -58,45 +58,52 @@ public:
 	SharedPtr<CppToken> GetSymbol();
 
 	// TODO
-	// bool GetConstInt(int32& Result, const TCHAR* Tag = NULL);
-	// bool GetConstInt64(int64& Result, const TCHAR* Tag = NULL);
+	bool GetConstInt(int32& Result, const TCHAR* Tag = NULL);
+	bool GetConstInt64(int64& Result, const TCHAR* Tag = NULL);
 
 	// Matching predefined text.
-	// bool MatchIdentifier(const TCHAR* Match);
-	// bool MatchConstInt(const TCHAR* Match);
-	// bool MatchAnyConstInt();
-	// bool PeekIdentifier(const TCHAR* Match);
-	// bool MatchSymbol(const TCHAR Match);
-	// bool MatchSymbol(const TCHAR* Match);
-	// void MatchSemi();
-	// bool PeekSymbol(const TCHAR Match);
+	bool MatchIdentifier(const TCHAR* Match);
+	bool MatchConstInt(const TCHAR* Match);
+	bool MatchAnyConstInt();
+	bool PeekIdentifier(const TCHAR* Match);
+	bool MatchSymbol(const TCHAR Match);
+	bool MatchSymbol(const TCHAR* Match);
+	bool MatchToken(Function<bool(const CppToken&)> Condition);
+	bool MatchSemi();
+	bool PeekSymbol(const TCHAR Match);
 
 	// Requiring predefined text.
-	// void RequireIdentifier(const TCHAR* Matc, const TCHAR* Tag);
-	// void RequireSymbol(const TCHAR Match, const TCHAR* Tag);
-	// void RequireSymbol(const TCHAR Match, Function<AString()> TagGetter);
-	// void RequireConstInt(const TCHAR* Match, const TCHAR* Tag);
-	// void RequireAnyConstInt(const TCHAR* Tag);
+	void RequireIdentifier(const TCHAR* Match, const TCHAR* Tag);
+	void RequireSymbol(const TCHAR Match, const TCHAR* Tag);
+	void RequireSymbol(const TCHAR Match, Function<AString()> TagGetter);
+	void RequireConstInt(const TCHAR* Match, const TCHAR* Tag);
+	void RequireAnyConstInt(const TCHAR* Tag);
+	void RequireSemi();
+
+public:
+
+	AString GetLocation() const;
+
 
 protected:
 
 	// Input text
-	const TCHAR* Input;
+	const TCHAR* Input = nullptr;
 	// Length of input text
-	int32 InputLen;
+	int32 InputLen = 0;
 	// Current position in text
-	int32 InputPos;
+	int32 InputPos = 0;
 	// Current line in text
-	int32 InputLine;
+	int32 InputLine = 0;
 	// last GetChar line
-	int32 PrevPos;
+	int32 PrevPos = 0;
 	// last GetChar pos
-	int32 PrevLine;
+	int32 PrevLine = 0;
 	// Previous comment parsed by GetChar() call.
 	AString PrevComment;
 	// Number of statements parsed.
-	int32 StatementsParsed;
+	int32 StatementsParsed = 0;
 	// Total number of lines parsed.
-	int32 LinesParsed;
+	int32 LinesParsed = 0;
 
 };

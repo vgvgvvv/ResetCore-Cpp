@@ -33,7 +33,6 @@ private:
 };
 
 
-
 class EnumType final : public Type
 {
 public:
@@ -67,6 +66,6 @@ public:
 
 private:
 	std::map<const std::string, const EnumFieldInfo> Fields;
-	bool IsEnumClass;
+	bool IsEnumClass = false;
 };
 

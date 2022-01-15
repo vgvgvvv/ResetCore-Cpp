@@ -199,11 +199,15 @@ public:
 
 	bool IsA(const Class* targetClass) const
     {
-        const auto baseClass = GetBaseClass();
-        if (*baseClass == *targetClass)
+        if(targetClass == nullptr)
+        {
+            return false;
+        }
+        if(*this == *targetClass)
         {
             return true;
         }
+        const auto baseClass = GetBaseClass();
         if (baseClass == nullptr)
         {
             return false;

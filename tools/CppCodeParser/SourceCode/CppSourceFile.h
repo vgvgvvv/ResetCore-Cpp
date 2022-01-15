@@ -6,6 +6,7 @@
 
 enum class ScopeType;
 class BaseScope;
+class GlobalScope;
 
 class NestInfo
 {
@@ -13,7 +14,7 @@ public:
 
     SharedPtr<BaseScope> GetCurrentScope();
 
-    void PushScope(const Class* Type);
+    void PushScope(SharedPtr<BaseScope> NewScope);
 
     SharedPtr<BaseScope> PopScope();
 
@@ -30,9 +31,7 @@ public:
         Parse();
     }
 
-private:
-
-    void Parse();
+    SharedPtr<GlobalScope> Parse();
 
 public:
 	AString FilePath;

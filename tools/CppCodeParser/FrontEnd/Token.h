@@ -67,6 +67,8 @@ public:
 	// GetName
 	AString GetTokenName() const;
 
+	const TCHAR* GetRawTokenName() const;
+
 	AString GetConstantValue() const;
 
 	CppTokenType GetTokenType() const
@@ -87,7 +89,7 @@ public:
 
 	bool Matches(const char* Str) const
 	{
-		return (TokenType == CppTokenType::Identifier || TokenType == CppTokenType::Symbol) && StringEx::Strcmp(Identifier, Str);
+		return (TokenType == CppTokenType::Identifier || TokenType == CppTokenType::Symbol) && StringEx::Strcmp(Identifier, Str) == 0;
 	}
 
 	bool IsBool() const

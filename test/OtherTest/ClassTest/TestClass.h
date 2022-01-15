@@ -1,6 +1,5 @@
 #pragma once
 #include "CommonHeader.h"
-#include "TestClass.reflect.h"
 
 RE_CLASS()
 class TestClass

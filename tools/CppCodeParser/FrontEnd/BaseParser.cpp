@@ -446,3 +446,240 @@ SharedPtr<CppToken> BaseParser::GetSymbol()
 	UngetToken(Token);
 	return nullptr;
 }
+
+bool BaseParser::GetConstInt(int32& Result, const TCHAR* Tag)
+{
+	auto Token = GetToken();
+	if(Token)
+	{
+		if(Token->GetConstInt(Result))
+		{
+			return true;
+		}
+		else
+		{
+			UngetToken(Token);
+		}
+	}
+
+	if(Tag != nullptr)
+	{
+		RE_ASSERT_MSG(false, "%s : Missing constant integer", Tag)
+	}
+
+	return false;
+}
+
+bool BaseParser::GetConstInt64(int64& Result, const TCHAR* Tag)
+{
+	auto Token = GetToken();
+	if (Token)
+	{
+		if (Token->GetConstInt64(Result))
+		{
+			return true;
+		}
+		else
+		{
+			UngetToken(Token);
+		}
+	}
+
+	if (Tag != nullptr)
+	{
+		RE_ASSERT_MSG(false, "%s : Missing constant integer", Tag)
+	}
+
+	return false;
+}
+
+bool BaseParser::MatchIdentifier(const TCHAR* Match)
+{
+	auto Token = GetToken();
+	if(Token != nullptr)
+	{
+		if(Token->GetTokenType() == CppTokenType::Identifier &&
+			Token->Matches(Match))
+		{
+			return true;
+		}
+		else
+		{
+			UngetToken(Token);
+		}
+	}
+	return false;
+}
+
+bool BaseParser::MatchConstInt(const TCHAR* Match)
+{
+	auto Token = GetToken();
+	if(Token)
+	{
+		if(Token->GetTokenType() == CppTokenType::Const 
+			&& (Token->GetConstType() == CppTokenConstType::Int || Token->GetConstType() == CppTokenConstType::Int64)
+			&& Token->GetTokenName() == Match)
+		{
+			return true;
+		}
+		else
+		{
+			UngetToken(Token);
+		}
+	}
+	
+	return false;
+}
+
+bool BaseParser::MatchAnyConstInt()
+{
+	auto Token = GetToken();
+	if (Token)
+	{
+		if (Token->GetTokenType() == CppTokenType::Const
+			&& (Token->GetConstType() == CppTokenConstType::Int 
+				|| Token->GetConstType() == CppTokenConstType::Int64))
+		{
+			return true;
+		}
+		else
+		{
+			UngetToken(Token);
+		}
+	}
+
+	return false;
+}
+
+bool BaseParser::PeekIdentifier(const TCHAR* Match)
+{
+	auto Token = GetToken(true);
+	if(!Token)
+	{
+		return false;
+	}
+	UngetToken(Token);
+	return Token->GetTokenType() == CppTokenType::Identifier
+		&& Token->GetTokenName() == Match;
+}
+
+bool BaseParser::MatchSymbol(const TCHAR Match)
+{
+	auto Token = GetToken(true);
+	if(Token)
+	{
+		if(Token->GetTokenType() == CppTokenType::Symbol 
+			&& Token->GetRawTokenName()[0] == Match 
+			&& Token->GetRawTokenName()[1] == 0)
+		{
+			return true;
+		}else
+		{
+			UngetToken(Token);
+		}
+	}
+	return false;
+}
+
+bool BaseParser::MatchSymbol(const TCHAR* Match)
+{
+	auto Token = GetToken(true);
+	if (Token)
+	{
+		if (Token->GetTokenType() == CppTokenType::Symbol
+			&& Token->GetTokenName() == Match)
+		{
+			return true;
+		}
+		else
+		{
+			UngetToken(Token);
+		}
+	}
+	return false;
+}
+
+bool BaseParser::MatchToken(Function<bool(const CppToken&)> Condition)
+{
+	auto Token = GetToken(true);
+	if (Token)
+	{
+		if (Condition(*Token))
+		{
+			return true;
+		}
+		else
+		{
+			UngetToken(Token);
+		}
+	}
+	return false;
+}
+
+bool BaseParser::MatchSemi()
+{
+	if (MatchSymbol(';'))
+	{
+		return true;
+	}
+	return false;
+}
+
+void BaseParser::RequireSemi()
+{
+	if(!MatchSymbol(';'))
+	{
+		auto Token = GetToken();
+		if(Token)
+		{
+			RE_ASSERT_MSG(false, "Missing ';' before %s", Token->GetRawTokenName())
+		}
+		else
+		{
+			RE_ASSERT_MSG(false, "Missing ';'")
+		}
+	}
+}
+
+AString BaseParser::GetLocation() const
+{
+	return fmt::format("{0}:{1}", InputLine, InputPos);
+}
+
+bool BaseParser::PeekSymbol(const TCHAR Match)
+{
+	auto Token = GetToken(true);
+	if(!Token)
+	{
+		return false;
+	}
+	UngetToken(Token);
+	return Token->GetTokenType() == CppTokenType::Symbol
+		&& Token->GetRawTokenName()[0] == Match
+		&& Token->GetRawTokenName()[1] == 0;
+}
+
+void BaseParser::RequireIdentifier(const TCHAR* Match, const TCHAR* Tag)
+{
+	RE_ASSERT_MSG(MatchIdentifier(Match), "Missing '%s' in %s", Match, Tag)
+}
+
+void BaseParser::RequireSymbol(const TCHAR Match, const TCHAR* Tag)
+{
+	RE_ASSERT_MSG(MatchSymbol(Match), "Missing %c in %s", Match, Tag)
+}
+
+void BaseParser::RequireSymbol(const TCHAR Match, Function<AString()> TagGetter)
+{
+	RE_ASSERT_MSG(MatchSymbol(Match), "Missing %c in %s", Match, TagGetter().c_str())
+}
+
+void BaseParser::RequireConstInt(const TCHAR* Match, const TCHAR* Tag)
+{
+	RE_ASSERT_MSG(MatchConstInt(Match), "Missing integer '%s' in %s", Match, Tag);
+}
+
+void BaseParser::RequireAnyConstInt(const TCHAR* Tag)
+{
+	RE_ASSERT_MSG(MatchAnyConstInt(), "Missing integer in %s'", Tag)
+}

@@ -14,8 +14,19 @@ enum class MemberFlag
 	Static = 1,
 	Abstruct = 1 << 1,
 	Virtual = 1 << 2,
-	Overrided = 1 << 3
+	Overrided = 1 << 3,
+	Const = 1 << 4
 };
+
+inline MemberFlag operator|(MemberFlag a, MemberFlag b)
+{
+	return static_cast<MemberFlag>(static_cast<int>(a) | static_cast<int>(b));
+}
+
+inline MemberFlag operator|=(MemberFlag a, MemberFlag b)
+{
+	return static_cast<MemberFlag>(static_cast<int>(a) | static_cast<int>(b));
+}
 
 enum class MemberOwnerType
 {

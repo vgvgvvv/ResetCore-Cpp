@@ -2,6 +2,25 @@
 
 #include "FieldInfo.h"
 
+enum class MethodParamType
+{
+	None = 0,
+	Const = 1,
+};
+
+class MethodParamInfo
+{
+public:
+	MethodParamInfo(const AString& InName, MethodParamType InType)
+		: ParamName(InName)
+		, ParamType(InType)
+	{
+	}
+
+private:
+	AString ParamName;
+	MethodParamType ParamType = MethodParamType::None;
+};
 
 class MethodInfo : public MemberInfo
 {

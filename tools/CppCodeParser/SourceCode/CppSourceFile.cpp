@@ -14,25 +14,28 @@ SharedPtr<BaseScope> NestInfo::GetCurrentScope()
 	return ScopeInfo.top();
 }
 
-void NestInfo::PushScope(const Class* Type)
+void NestInfo::PushScope(SharedPtr<BaseScope> NewScope)
 {
-	RE_ASSERT(Type != nullptr && Type->IsA(BaseScope::StaticClass()))
-	ScopeInfo.push(Type->Create<BaseScope>());
+	RE_LOG_INFO("NestInfo", "Push {0} : {1}", 
+		NewScope->GetClass()->Name(), NewScope->GetName())
+	ScopeInfo.push(NewScope);
 }
 
 SharedPtr<BaseScope> NestInfo::PopScope()
 {
-	SharedPtr<BaseScope> result = ScopeInfo.top();
+	SharedPtr<BaseScope> Scope = ScopeInfo.top();
 	ScopeInfo.pop();
-	return result;
+	RE_LOG_INFO("NestInfo", "Pop {0} : {1}",
+		Scope->GetClass()->Name(), Scope->GetName())
+	return Scope;
 }
 
-void CppSourceFile::Parse()
+SharedPtr<GlobalScope> CppSourceFile::Parse()
 {
 	if(!fs::exists(FilePath))
 	{
 		RE_LOG_ERROR("CppSourceFile::Parse", "Cannot Find Cpp Source Path {0}", FilePath.c_str())
-		return;
+		return nullptr;
 	}
 	Content = CommonLib::ReadFileIntoString(FilePath);
 
@@ -51,12 +54,12 @@ void CppSourceFile::Parse()
 	else
 	{
 		RE_LOG_WARN("CppSourceFile::Parse", "Invalid Cpp File Type %s", Extension.c_str())
-		return;
+		return nullptr;
 	}
 
 	Parser->InitParserSource(Content.c_str());
 
-	NestInfo.PushScope(GlobalScope::StaticClass());
+	NestInfo.PushScope(std::make_shared<GlobalScope>());
 
 	while(true)
 	{
@@ -68,5 +71,5 @@ void CppSourceFile::Parse()
 		Parser->CompileDeclaration(*this, Token);
 	}
 
-	NestInfo.PopScope();
+	return std::static_pointer_cast<GlobalScope>(NestInfo.PopScope());
 }

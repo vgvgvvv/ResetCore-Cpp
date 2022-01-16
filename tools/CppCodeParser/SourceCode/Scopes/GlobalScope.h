@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseScope.h"
+#include "Json/JsonSerialization.h"
 
 class GlobalScope : public BaseScope
 {
@@ -23,3 +24,9 @@ private:
 	Vector<SharedPtr<FunctionGenerateInfo>> GlobalMethods;
 	Vector<SharedPtr<EnumGenerateInfo>> GlobalEnumTypes;
 };
+
+template<>
+nlohmann::json ToJson<GlobalScope>(const GlobalScope& Scope)
+{
+	
+}

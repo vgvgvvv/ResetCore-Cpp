@@ -3,7 +3,8 @@ set(targetName "CppCodeParser")
 ReMake_AddTarget(
         TARGET_NAME ${targetName}
         MODE SHARED
-        LIB ResetCore_CommonLib)
+        LIB ResetCore_CommonLib
+            ResetCore_Serialization)
 
 ReMake_StartUse()
 UseJson(${targetName})

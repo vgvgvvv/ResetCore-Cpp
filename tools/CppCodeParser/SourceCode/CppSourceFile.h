@@ -2,6 +2,9 @@
 
 #include "CommonHeader.h"
 #include "CppCodeParser_API.h"
+#include "nlohmann/json.hpp"
+#include "Json/JsonSerialization.h"
+#include "Scopes/GlobalScope.h"
 
 
 enum class ScopeType;
@@ -28,13 +31,32 @@ public:
         : FilePath(InFilePath)
 		, Content()
     {
-        Parse();
+        FileScope = Parse();
     }
 
     SharedPtr<GlobalScope> Parse();
+
+    SharedPtr<GlobalScope> GetFileScope() const
+    {
+        return FileScope;
+    }
 
 public:
 	AString FilePath;
     AString Content;
     NestInfo NestInfo;
+
+    SharedPtr<GlobalScope> FileScope;
 };
+
+
+template<>
+nlohmann::json ToJson<CppSourceFile>(const CppSourceFile& Obj)
+{
+    nlohmann::json Result;
+    auto FileScope = Obj.GetFileScope();
+
+	Result[std::string(GlobalScope::StaticClass()->Name())] = ToJson(*FileScope);
+
+    return Result;
+}

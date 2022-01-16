@@ -23,3 +23,4 @@ private:
 	Vector<SharedPtr<FunctionGenerateInfo>> GlobalMethods;
 	Vector<SharedPtr<EnumGenerateInfo>> GlobalEnumTypes;
 };
+

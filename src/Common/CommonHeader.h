@@ -7,6 +7,7 @@
 #include "Misc/StringEx.h"
 #include "Misc/Path.h"
 #include "Misc/Memory.h"
+#include "Misc/GlobalContext.h"
 
 #include "FileSystem/File.h"
 #include "FileSystem/Directory.h"

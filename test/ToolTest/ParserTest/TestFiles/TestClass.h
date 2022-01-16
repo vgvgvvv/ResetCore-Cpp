@@ -4,6 +4,14 @@
 
 namespace TestNamespace
 {
+
+	RE_ENUM()
+	enum class TestEnum
+	{
+		ValueFirst = 0,
+		ValueSecond = 1
+	};
+
 	RE_CLASS()
 	class TestClass
 	{

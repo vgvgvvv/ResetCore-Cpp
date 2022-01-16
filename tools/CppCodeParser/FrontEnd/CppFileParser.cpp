@@ -11,6 +11,7 @@
 
 DEFINE_DERIVED_CLASS_IMP(CppFileParser, BaseParser)
 
+StaticGlobalContextValue GVarDebugCppFileParser("DebugCppFileParser", true);
 
 bool CppFileParser::CompileDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token)
 {
@@ -161,7 +162,7 @@ bool CppFileParser::CompileEnumDeclaration(CppSourceFile& File, SharedPtr<CppTok
 
 	auto EnumNameToken = GetToken(true);
 
-	RE_ASSERT_MSG(EnumNameToken->GetTokenType() != CppTokenType::Identifier
+	RE_ASSERT_MSG(EnumNameToken->GetTokenType() == CppTokenType::Identifier
 		, "Invalid Enum !! at {}", GetFileLocation(File).c_str());
 
 	// enum name
@@ -185,15 +186,21 @@ bool CppFileParser::CompileEnumDeclaration(CppSourceFile& File, SharedPtr<CppTok
 	RequireSymbol('{', GetFileLocation(File).c_str());
 
 	auto CurrentEnumScope = std::make_shared<EnumScope>(EnumName);
-	File.NestInfo.PushScope(CurrentEnumScope);
 
 	auto EnumInfo = std::make_shared<EnumGenerateInfo>();
 	EnumInfo->Name = EnumName;
+	EnumInfo->IsClassEnum = IsEnumClass;
+	EnumInfo->Scope = CurrentEnumScope;
 
 	//TODO add enum info to scope
 	File.NestInfo.GetCurrentScope()->AddEnum(EnumInfo);
 
-	while(!MatchSymbol("}"))
+	File.NestInfo.PushScope(CurrentEnumScope);
+
+	PrintDebugInfo("Enter " + CurrentEnumScope->GetName());
+
+
+	while(true)
 	{
 		// Handle Single line
 		auto EnumValueNameToken = GetToken();
@@ -204,10 +211,29 @@ bool CppFileParser::CompileEnumDeclaration(CppSourceFile& File, SharedPtr<CppTok
 		GenerateInfo->Name = EnumValueNameToken->GetTokenName();
 		CurrentEnumScope->GetFieldInfos().push_back(GenerateInfo);
 
+		PrintDebugInfo("Enum Value : " + GenerateInfo->Name);
+
+		bool ExitEnumBody = false;
 		// next line
-		while(!MatchSymbol(',')){}
+		while(!MatchSymbol(','))
+		{
+			if(MatchSymbol('}'))
+			{
+				ExitEnumBody = true;
+				break;
+			}
+			GetToken();
+		}
+
+		if(ExitEnumBody)
+		{
+			break;
+		}
 	}
 
+	PrintDebugInfo("Exit " + CurrentEnumScope->GetName());
+
+	// ÍË³ö
 	File.NestInfo.PopScope();
 
 	return true;
@@ -236,12 +262,15 @@ bool CppFileParser::CompileFunctionDeclaration(CppSourceFile& File, SharedPtr<Cp
 		if(MatchIdentifier("static"))
 		{
 			CurrentFlag |= MemberFlag::Static;
+			continue;
 		}
 		else if(MatchIdentifier("virtual"))
 		{
 			CurrentFlag |= MemberFlag::Virtual;
+			continue;
 		}
 		//TODO
+		break;
 	}
 
 	auto CurrentScope = File.NestInfo.GetCurrentScope();
@@ -260,6 +289,7 @@ bool CppFileParser::CompileFunctionMarkDeclaration(CppSourceFile& File, SharedPt
 {
 	RequireSymbol('(', GetFileLocation(File).c_str());
 	RequireSymbol(')', GetFileLocation(File).c_str());
+	return true;
 }
 
 bool CppFileParser::CompileFieldDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token)
@@ -317,9 +347,8 @@ bool CppFileParser::CompileFieldDeclaration(CppSourceFile& File, SharedPtr<CppTo
 	AString FieldName = "";
 
 	// field type 
-	Type FieldType;
 
-	FieldInfo Field(FieldName, AccessType, CurrentFlag, OwnerType, &FieldType);
+	FieldGenerateInfo FieldInfo;
 	
 
 	return true;
@@ -329,6 +358,15 @@ bool CppFileParser::CompileFieldMarkDeclaration(CppSourceFile& File, SharedPtr<C
 {
 	RequireSymbol('(', GetFileLocation(File).c_str());
 	RequireSymbol(')', GetFileLocation(File).c_str());
+	return true;
+}
+
+void CppFileParser::PrintDebugInfo(const AString& Info)
+{
+	if(GlobalContext::Get().GetBoolValue("DebugCppFileParser"))
+	{
+		RE_LOG_INFO("PrintDebugInfo", "{}", Info.c_str());
+	}
 }
 
 AString CppFileParser::GetFileLocation(CppSourceFile& File) const

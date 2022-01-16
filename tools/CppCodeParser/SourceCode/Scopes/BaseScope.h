@@ -34,27 +34,27 @@ public:
 
 	virtual ~BaseScope() = default;
 
-	virtual void AddNamespace(SharedPtr<class NamespaceGenerateInfo> InSpaceName)
+	virtual void AddNamespace(SharedPtr<struct NamespaceGenerateInfo> InSpaceName)
 	{
 		RE_ASSERT_MSG(false, "Current Scope Not Support Add Namespace");
 	}
 
-	virtual void AddClass(SharedPtr<class ClassGenerateInfo> InClass)
+	virtual void AddClass(SharedPtr<struct ClassGenerateInfo> InClass)
 	{
 		RE_ASSERT_MSG(false, "Current Scope Not Support Add Class");
 	}
 
-	virtual void AddMethod(SharedPtr<class FunctionGenerateInfo> InMethodInfo)
+	virtual void AddMethod(SharedPtr<struct FunctionGenerateInfo> InMethodInfo)
 	{
 		RE_ASSERT_MSG(false, "Current Scope Not Support Add MethodInfo");
 	}
 
-	virtual void AddField(SharedPtr<class FieldGenerateInfo> InFieldInfo)
+	virtual void AddField(SharedPtr<struct FieldGenerateInfo> InFieldInfo)
 	{
 		RE_ASSERT_MSG(false, "Current Scope Not Support Add FieldInfo");
 	}
 
-	virtual void AddEnum(SharedPtr<class EnumGenerateInfo> InEnumType)
+	virtual void AddEnum(SharedPtr<struct EnumGenerateInfo> InEnumType)
 	{
 		RE_ASSERT_MSG(false, "Current Scope Not Support Add EnumType");
 	}

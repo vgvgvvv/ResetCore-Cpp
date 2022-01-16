@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseScope.h"
 
-class EnumValueGenerateInfo;
+struct EnumValueGenerateInfo;
 
 class EnumScope : public BaseScope
 {

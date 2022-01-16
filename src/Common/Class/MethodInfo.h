@@ -11,14 +11,14 @@ enum class MethodParamType
 class MethodParamInfo
 {
 public:
-	MethodParamInfo(const AString& InName, MethodParamType InType)
+	MethodParamInfo(const std::string & InName, MethodParamType InType)
 		: ParamName(InName)
 		, ParamType(InType)
 	{
 	}
 
 private:
-	AString ParamName;
+	std::string ParamName;
 	MethodParamType ParamType = MethodParamType::None;
 };
 

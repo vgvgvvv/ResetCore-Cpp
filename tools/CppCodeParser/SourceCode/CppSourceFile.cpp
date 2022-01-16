@@ -16,8 +16,11 @@ SharedPtr<BaseScope> NestInfo::GetCurrentScope()
 
 void NestInfo::PushScope(SharedPtr<BaseScope> NewScope)
 {
-	RE_LOG_INFO("NestInfo", "Push {0} : {1}", 
-		NewScope->GetClass()->Name(), NewScope->GetName())
+	if(GlobalContext::Get().GetBoolValue("DebugCppFileParser"))
+	{
+		RE_LOG_INFO("NestInfo", "Push {0} : {1}",
+			NewScope->GetClass()->Name(), NewScope->GetName())
+	}
 	ScopeInfo.push(NewScope);
 }
 
@@ -25,8 +28,11 @@ SharedPtr<BaseScope> NestInfo::PopScope()
 {
 	SharedPtr<BaseScope> Scope = ScopeInfo.top();
 	ScopeInfo.pop();
-	RE_LOG_INFO("NestInfo", "Pop {0} : {1}",
-		Scope->GetClass()->Name(), Scope->GetName())
+	if (GlobalContext::Get().GetBoolValue("DebugCppFileParser"))
+	{
+		RE_LOG_INFO("NestInfo", "Pop {0} : {1}",
+			Scope->GetClass()->Name(), Scope->GetName())
+	}
 	return Scope;
 }
 

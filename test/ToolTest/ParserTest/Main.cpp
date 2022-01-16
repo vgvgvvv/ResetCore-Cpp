@@ -6,7 +6,9 @@
 
 int main()
 {
-	CppSourceFile File(TestNamespace::TestClass::GetCurrentFileName());
+	auto TestFileName = TestNamespace::TestClass::GetCurrentFileName();
+	RE_LOG_INFO("Main", "Parse File : {}", TestFileName)
+	CppSourceFile File(TestFileName);
 
 	return 0;
 }

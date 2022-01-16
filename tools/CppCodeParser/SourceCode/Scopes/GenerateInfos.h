@@ -4,18 +4,20 @@
 
 struct AttributeInfo
 {
-	Vector<AString> AttrInfos;
+	Vector<AString> AttrArr;
 };
 
 struct ClassGenerateInfo
 {
 	AString ClassName;
+	SharedPtr<ClassScope> Scope;
 };
 
 struct EnumGenerateInfo
 {
 	AString Name;
 	bool IsClassEnum;
+	AttributeInfo AttrInfo;
 	SharedPtr<EnumScope> Scope;
 };
 
@@ -28,13 +30,27 @@ struct FunctionParamGenerateInfo
 {
 	AString Name;
 	AString TypeName;
+	bool IsConst;
+};
+
+struct FunctionReturnParamGenerateInfo
+{
+	AString TypeName;
+	bool IsConst;
 };
 
 struct FunctionGenerateInfo
 {
 	AString FunctionName;
-	FunctionParamGenerateInfo ReturnType;
-	Vector<FunctionParamGenerateInfo> ParamTypes;
+	MemberFlag Flag;
+	MemberAccessType AccessType;
+	MemberOwnerType OwnerType;
+
+	FunctionReturnParamGenerateInfo ReturnTypeName;
+	Vector<FunctionParamGenerateInfo> ParamTypeNames;
+
+	AttributeInfo AttrInfo;
+	SharedPtr<FunctionScope> Scope;
 };
 
 struct NamespaceGenerateInfo
@@ -49,4 +65,5 @@ struct FieldGenerateInfo
 	MemberAccessType AccessType;
 	MemberFlag Flag;
 	MemberOwnerType OwnerType;
+	AttributeInfo AttrInfo;
 };

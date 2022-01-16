@@ -13,6 +13,13 @@ namespace TestNamespace
 	};
 
 	RE_CLASS()
+	struct TestStruct
+	{
+		DEFINE_CLASS(TestStruct)
+
+	};
+
+	RE_CLASS()
 	class TestClass
 	{
 		DEFINE_CLASS(TestClass)
@@ -24,6 +31,19 @@ namespace TestNamespace
 		{
 			return __FILE__;
 		}
+
+		RE_FUNCTION()
+		const AString& GetTestStr() const
+		{
+			return TestStr;
+		}
+
+
+		RE_FIELD()
+		int TestInt = 0;
+
+		RE_FIELD()
+		AString TestStr;
 
 	};
 }

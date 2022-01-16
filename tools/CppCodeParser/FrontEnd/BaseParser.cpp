@@ -407,6 +407,91 @@ SharedPtr<CppToken> BaseParser::GetToken(bool bNoConsts)
 	}
 }
 
+Vector<SharedPtr<CppToken>> BaseParser::GetTokensUntil(Function<bool(CppToken&)> Condition, bool bNoConst)
+{
+	Vector<SharedPtr<CppToken>> Tokens;
+	while(true)
+	{
+		auto CurrentToken = GetToken(bNoConst);
+
+		RE_ASSERT_MSG(CurrentToken != nullptr, "Exit Early !! at", GetLocation());
+
+		Tokens.push_back(CurrentToken);
+
+		if(Condition(*CurrentToken))
+		{
+			break;
+		}
+	}
+
+	return Tokens;
+}
+
+Vector<SharedPtr<CppToken>> BaseParser::GetTokenUntilMatch(const char Match, bool bNoConst)
+{
+	Vector<SharedPtr<CppToken>> Tokens;
+	while (true)
+	{
+		auto CurrentToken = GetToken(bNoConst);
+		RE_ASSERT_MSG(CurrentToken != nullptr, "Exit Early !! at", GetLocation());
+
+		Tokens.push_back(CurrentToken);
+
+		if (CurrentToken->Matches(Match))
+		{
+			break;
+		}
+	}
+
+	return Tokens;
+}
+
+Vector<SharedPtr<CppToken>> BaseParser::GetTokenUntilMatch(const char* Match, bool bNoConst)
+{
+	Vector<SharedPtr<CppToken>> Tokens;
+	while (true)
+	{
+		auto CurrentToken = GetToken(bNoConst);
+		RE_ASSERT_MSG(CurrentToken != nullptr, "Exit Early !! at", GetLocation());
+
+		Tokens.push_back(CurrentToken);
+
+		if (CurrentToken->Matches(Match))
+		{
+			break;
+		}
+	}
+
+	return Tokens;
+}
+
+Vector<SharedPtr<CppToken>> BaseParser::GetTokensUntilPairMatch(const char Left, const char Right)
+{
+	int MatchCount = 1;
+	Vector<SharedPtr<CppToken>> Tokens;
+	while(true)
+	{
+		auto CurrentToken = GetToken(false);
+		RE_ASSERT_MSG(CurrentToken != nullptr, "Exit Early !! at", GetLocation());
+
+		Tokens.push_back(CurrentToken);
+
+		if(CurrentToken->Matches(Left))
+		{
+			MatchCount++;
+		}
+		else if(CurrentToken->Matches(Right))
+		{
+			MatchCount--;
+		}
+		if(MatchCount == 0)
+		{
+			break;
+		}
+	}
+	return Tokens;
+}
+
 void BaseParser::UngetToken(const SharedPtr<CppToken>& Token)
 {
 	InputPos = Token->StartPos;

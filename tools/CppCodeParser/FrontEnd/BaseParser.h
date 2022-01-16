@@ -52,6 +52,11 @@ public:
 	 */
 	SharedPtr<CppToken> GetToken(bool bNoConsts = false);
 
+	Vector<SharedPtr<CppToken>> GetTokensUntil(Function<bool(CppToken&)> Condition, bool bNoConst = false);
+	Vector<SharedPtr<CppToken>> GetTokenUntilMatch(const char Match, bool bNoConst = false);
+	Vector<SharedPtr<CppToken>> GetTokenUntilMatch(const char* Match, bool bNoConst = false);
+	Vector<SharedPtr<CppToken>> GetTokensUntilPairMatch(const char Left, const char Right);
+
 	void UngetToken(const SharedPtr<CppToken>& Token);
 
 	SharedPtr<CppToken>  GetIdentifier(bool bNoConsts = false);

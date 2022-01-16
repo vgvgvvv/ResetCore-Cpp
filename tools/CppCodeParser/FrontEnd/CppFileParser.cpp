@@ -5,6 +5,7 @@
 #include "SourceCode/Scopes/BaseScope.h"
 #include "SourceCode/Scopes/ClassScope.h"
 #include "SourceCode/Scopes/EnumScope.h"
+#include "SourceCode/Scopes/FunctionScope.h"
 #include "SourceCode/Scopes/GlobalScope.h"
 #include "SourceCode/Scopes/NamespaceScope.h"
 #include "SourceCode/Scopes/GenerateInfos.h"
@@ -54,7 +55,7 @@ bool CppFileParser::CompileDeclaration(CppSourceFile& File, SharedPtr<CppToken> 
 		}
 	}
 
-	if(Token->GetTokenName() == "RE_VAR")
+	if(Token->GetTokenName() == "RE_FIELD")
 	{
 		auto Succ = CompileFieldDeclaration(File, Token);
 		if (Succ)
@@ -107,19 +108,19 @@ bool CppFileParser::CompileClassDeclaration(CppSourceFile& File, SharedPtr<CppTo
 	{
 		auto Token = GetToken();
 		RE_ASSERT_MSG(Token != nullptr, "Exit Early!");
-		if(Token->Matches("class"))
+		if(Token->Matches("class") || Token->Matches("struct"))
 		{
 			break;
 		}
 	}
 
-	auto ClassName = GetToken();
-	RE_ASSERT_MSG(ClassName != nullptr, "Exit Early!");
-	if(ClassName->GetTokenName().ends_with("_API"))
+	auto ClassNameToken = GetToken();
+	RE_ASSERT_MSG(ClassNameToken != nullptr, "Exit Early!");
+	if(ClassNameToken->GetTokenName().ends_with("_API"))
 	{
 		// 处理class XXX_API className的情况
-		ClassName = GetToken();
-		RE_ASSERT_MSG(ClassName != nullptr, "Exit Early!");
+		ClassNameToken = GetToken();
+		RE_ASSERT_MSG(ClassNameToken != nullptr, "Exit Early!");
 	}
 	else
 	{
@@ -131,9 +132,17 @@ bool CppFileParser::CompileClassDeclaration(CppSourceFile& File, SharedPtr<CppTo
 		}
 	}
 
-	RE_ASSERT_MSG(ClassName->GetTokenType() == CppTokenType::Identifier, "Exit Early!");
+	RE_ASSERT_MSG(ClassNameToken->GetTokenType() == CppTokenType::Identifier, "Exit Early!");
 
-	auto CurrentClassScope = std::make_shared<ClassScope>(ClassName->GetTokenName());
+
+	auto ClassName = ClassNameToken->GetTokenName();
+	auto CurrentClassScope = std::make_shared<ClassScope>(ClassName);
+
+	auto ClassInfo = std::make_shared<ClassGenerateInfo>();
+	ClassInfo->ClassName = ClassName;
+	ClassInfo->Scope = CurrentClassScope;
+
+	File.NestInfo.GetCurrentScope()->AddClass(ClassInfo);
 
 	File.NestInfo.PushScope(CurrentClassScope);
 
@@ -143,7 +152,7 @@ bool CppFileParser::CompileClassDeclaration(CppSourceFile& File, SharedPtr<CppTo
 bool CppFileParser::CompileClassMarkDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token)
 {
 	RequireSymbol('(', GetFileLocation(File).c_str());
-	RequireSymbol(')', GetFileLocation(File).c_str());
+	auto Tokens = GetTokensUntilPairMatch('(', ')');
 	return true;
 }
 
@@ -242,7 +251,7 @@ bool CppFileParser::CompileEnumDeclaration(CppSourceFile& File, SharedPtr<CppTok
 bool CppFileParser::CompileEnumMarkDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token)
 {
 	RequireSymbol('(', GetFileLocation(File).c_str());
-	RequireSymbol(')', GetFileLocation(File).c_str());
+	auto Tokens = GetTokensUntilPairMatch('(', ')');
 	return true;
 }
 
@@ -251,44 +260,120 @@ bool CppFileParser::CompileFunctionDeclaration(CppSourceFile& File, SharedPtr<Cp
 	// 分析RE_FUNCTION头
 	CompileFunctionMarkDeclaration(File, Token);
 
-	MemberFlag CurrentFlag = MemberFlag::None;
-
-	while(true)
-	{
-		if(MatchToken([](auto& Token){ return Token.GetTokenName().ends_with("_API"); }))
-		{
-			continue;
-		}
-		if(MatchIdentifier("static"))
-		{
-			CurrentFlag |= MemberFlag::Static;
-			continue;
-		}
-		else if(MatchIdentifier("virtual"))
-		{
-			CurrentFlag |= MemberFlag::Virtual;
-			continue;
-		}
-		//TODO
-		break;
-	}
-
+	auto FunctionInfo = std::make_shared<FunctionGenerateInfo>();
 	auto CurrentScope = File.NestInfo.GetCurrentScope();
-	if(CurrentScope->GetClass() == ClassScope::StaticClass())
+	CurrentScope->AddMethod(FunctionInfo);
+
+
+	// access type and owner type
 	{
-		
+		if (CurrentScope->GetClass() == ClassScope::StaticClass())
+		{
+			auto CurrentClassScope = std::static_pointer_cast<ClassScope>(CurrentScope);
+			FunctionInfo->AccessType = CurrentClassScope->GetCurrentAccessType();
+			FunctionInfo->OwnerType = MemberOwnerType::ClassMember;
+		}
+		else
+		{
+			FunctionInfo->AccessType = MemberAccessType::None;
+			FunctionInfo->OwnerType = MemberOwnerType::Global;
+		}
 	}
-	else if(CurrentScope->GetClass() == GlobalScope::StaticClass() || CurrentScope->GetClass() == NamespaceScope::StaticClass())
+
+
+	// flag
 	{
-		
+		MemberFlag CurrentFlag = MemberFlag::None;
+		while (true)
+		{
+			if (MatchToken([](auto& Token) { return Token.GetTokenName().ends_with("_API"); }))
+			{
+				continue;
+			}
+			if (MatchIdentifier("static"))
+			{
+				CurrentFlag |= MemberFlag::Static;
+				continue;
+			}
+			else if (MatchIdentifier("virtual"))
+			{
+				CurrentFlag |= MemberFlag::Virtual;
+				continue;
+			}
+			else if(MatchIdentifier("const"))
+			{
+				FunctionInfo->ReturnTypeName.IsConst = true;
+			}
+			else if(MatchIdentifier("class"))
+			{
+				continue;
+			}
+			else if(MatchIdentifier("inline"))
+			{
+				continue;
+			}
+			//TODO some other identify
+			break;
+		}
+
+		FunctionInfo->Flag = CurrentFlag;
 	}
+
+	// get token until '('
+	auto TokensBeforeParams = 
+		GetTokensUntil([](CppToken& Token) {return Token.Matches('('); });
+
+	// last is '(' second last is function name
+	auto FunctionNameToken = TokensBeforeParams[TokensBeforeParams.size() - 2];
+	auto FunctionName = FunctionNameToken->GetTokenName();
+	FunctionInfo->FunctionName = FunctionName;
+
+	// TODO return param
+	// only support single identifier typename, dont use like "unsigned int"
+	//auto ReturnParamToken = GetToken(true);
+
+	auto TokenBeforeParamsEnd = GetTokensUntilPairMatch('(', ')');
+
+	// TODO arg params
+	// RE_ASSERT_MSG(ReturnParamToken != nullptr && ReturnParamToken->GetTokenType() == CppTokenType::Identifier, 
+	// 	"Invalid Function Return Type Name !! at {}", GetFileLocation(File).c_str())
+
+	// function end with const
+	if(MatchIdentifier("const"))
+	{
+		FunctionInfo->Flag |= MemberFlag::Const;
+	}
+
+	if(MatchSymbol('=') && MatchSymbol('0'))
+	{
+		FunctionInfo->Flag |= MemberFlag::Abstruct;
+	}
+
+	if(MatchSemi())
+	{
+		return true;
+	}
+
+	RequireSymbol('{', GetFileLocation(File).c_str());
+
+	PrintDebugInfo("Add Function " + FunctionName);
+
+	auto Scope = std::make_shared<FunctionScope>(FunctionName);
+	FunctionInfo->Scope = Scope;
+
+	File.NestInfo.PushScope(Scope);
+
+	GetTokensUntilPairMatch('{', '}');
+
+	File.NestInfo.PopScope();
+	
 	return true;
 }
 
 bool CppFileParser::CompileFunctionMarkDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token)
 {
 	RequireSymbol('(', GetFileLocation(File).c_str());
-	RequireSymbol(')', GetFileLocation(File).c_str());
+	auto Tokens = GetTokensUntilPairMatch('(', ')');
 	return true;
 }
 
@@ -296,59 +381,82 @@ bool CppFileParser::CompileFieldDeclaration(CppSourceFile& File, SharedPtr<CppTo
 {
 	CompileFieldMarkDeclaration(File, Token);
 
-	// access type
-	MemberAccessType AccessType = MemberAccessType::None;
 	auto CurrentScope = File.NestInfo.GetCurrentScope();
-	if(CurrentScope->GetClass() == ClassScope::StaticClass())
-	{
-		auto CurrentClassScope = std::static_pointer_cast<ClassScope>(CurrentScope);
-		AccessType = CurrentClassScope->GetCurrentAccessType();
-	}
+	auto FieldInfo = std::make_shared<FieldGenerateInfo>();
 
+	CurrentScope->AddField(FieldInfo);
+
+	// access type and owner type
+	{
+		MemberAccessType AccessType = MemberAccessType::None;
+		if (CurrentScope->GetClass() == ClassScope::StaticClass())
+		{
+			auto CurrentClassScope = std::static_pointer_cast<ClassScope>(CurrentScope);
+			FieldInfo->AccessType = CurrentClassScope->GetCurrentAccessType();
+			FieldInfo->OwnerType = MemberOwnerType::ClassMember;
+		}
+		else
+		{
+			FieldInfo->AccessType = MemberAccessType::None;
+			FieldInfo->OwnerType = MemberOwnerType::Global;
+			
+		}
+	}
+	
 	// member flag
-	MemberFlag CurrentFlag = MemberFlag::None;
-	// function decorator
-	while (true)
 	{
-		if (MatchToken([](auto& Token) { return Token.GetTokenName().ends_with("_API"); }))
+		MemberFlag CurrentFlag = MemberFlag::None;
+		// field decorator
+		while (true)
 		{
-			continue;
+			if (MatchToken([](auto& Token) { return Token.GetTokenName().ends_with("_API"); }))
+			{
+				continue;
+			}
+			if (MatchIdentifier("static"))
+			{
+				CurrentFlag |= MemberFlag::Static;
+				continue;
+			}
+			else if (MatchIdentifier("virtual"))
+			{
+				CurrentFlag |= MemberFlag::Virtual;
+				continue;
+			}
+			else if (MatchIdentifier("const"))
+			{
+				CurrentFlag |= MemberFlag::Const;
+				continue;
+			}
+			else if (MatchIdentifier("class"))
+			{
+				continue;
+			}
+			break;
 		}
-		if (MatchIdentifier("static"))
-		{
-			CurrentFlag |= MemberFlag::Static;
-			continue;
-		}
-		else if (MatchIdentifier("virtual"))
-		{
-			CurrentFlag |= MemberFlag::Virtual;
-			continue;
-		}
-		else if(MatchIdentifier("const"))
-		{
-			CurrentFlag |= MemberFlag::Const;
-			continue;
-		}
-		break;
+		FieldInfo->Flag = CurrentFlag;
 	}
+	
+	auto TokensBeforeDefine = GetTokensUntil(
+		[](CppToken& Token) {return Token.Matches('=') || Token.Matches(';'); });
 
-	// member owner type
-	MemberOwnerType OwnerType = MemberOwnerType::None;
-	if (CurrentScope->GetClass() == ClassScope::StaticClass())
-	{
-		OwnerType = MemberOwnerType::ClassMember;
-	}
-	else
-	{
-		OwnerType = MemberOwnerType::Global;
-	}
+	RE_ASSERT_MSG(TokensBeforeDefine.size() > 2, "Invalid Field Definition !! at {}", GetFileLocation(File));
 
 	// field name
-	AString FieldName = "";
+	auto FieldNameToken = TokensBeforeDefine[TokensBeforeDefine.size() - 2];
+	auto FieldName = FieldNameToken->GetTokenName();
 
-	// field type 
+	FieldInfo->FieldName = FieldName;
 
-	FieldGenerateInfo FieldInfo;
+	PrintDebugInfo("Add Field " + FieldName);
+
+	// field type
+	// TODO
+
+	if(TokensBeforeDefine[TokensBeforeDefine.size()-1]->Matches('='))
+	{
+		GetTokenUntilMatch(';');
+	}
 	
 
 	return true;
@@ -357,7 +465,7 @@ bool CppFileParser::CompileFieldDeclaration(CppSourceFile& File, SharedPtr<CppTo
 bool CppFileParser::CompileFieldMarkDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token)
 {
 	RequireSymbol('(', GetFileLocation(File).c_str());
-	RequireSymbol(')', GetFileLocation(File).c_str());
+	auto Tokens = GetTokensUntilPairMatch('(', ')');
 	return true;
 }
 

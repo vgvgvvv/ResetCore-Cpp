@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonHeader.h"
+#include "Json/JsonSerialization.h"
 
 enum class ScopeType
 {
@@ -66,3 +67,9 @@ protected:
 	AString Name;
 
 };
+
+
+BEGIN_TO_JSON(BaseScope)
+Result["Class"] = Obj.GetClass()->Name();
+Result["Name"] = Obj.GetName();
+END_TO_JSON()

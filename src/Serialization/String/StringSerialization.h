@@ -9,6 +9,12 @@ AString ToString(const T& Obj)
 	static_assert(false, "Not Support Current Type!!");
 }
 
+template<>
+AString ToString<AString>(const AString& Obj)
+{
+    return Obj;
+}
+
 class ResetCore_Serialization_API StringSerialization
 {
 	template<typename T>

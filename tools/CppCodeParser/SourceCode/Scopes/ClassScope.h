@@ -21,6 +21,11 @@ public:
 	MemberAccessType GetCurrentAccessType() const;
 	bool CompileCurrentScope(CppFileParser& Parser, CppSourceFile& File, SharedPtr<CppToken> Token) override;
 
+	DEFINE_GETTER(Vector<SharedPtr<ClassGenerateInfo>>, InternalClasses)
+	DEFINE_GETTER(Vector<SharedPtr<FieldGenerateInfo>>, MemberFields)
+	DEFINE_GETTER(Vector<SharedPtr<FunctionGenerateInfo>>, MemberMehtods)
+	DEFINE_GETTER(Vector<SharedPtr<EnumGenerateInfo>>, InternalEnumTypes)
+
 private:
 	Vector<SharedPtr<ClassGenerateInfo>> InternalClasses;
 	Vector<SharedPtr<FieldGenerateInfo>> MemberFields;
@@ -29,3 +34,11 @@ private:
 
 	MemberAccessType CurrentMemberAccessType = MemberAccessType::Private;
 };
+
+BEGIN_TO_JSON(ClassScope)
+BASE_TO_JSON(BaseScope)
+TO_JSON_ARG_WITH_GETTER(InternalClasses)
+TO_JSON_ARG_WITH_GETTER(MemberFields)
+TO_JSON_ARG_WITH_GETTER(MemberMehtods)
+TO_JSON_ARG_WITH_GETTER(InternalEnumTypes)
+END_TO_JSON()

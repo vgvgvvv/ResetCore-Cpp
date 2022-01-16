@@ -36,27 +36,19 @@ public:
 
     SharedPtr<GlobalScope> Parse();
 
-    SharedPtr<GlobalScope> GetFileScope() const
-    {
-        return FileScope;
-    }
-
 public:
 	AString FilePath;
     AString Content;
     NestInfo NestInfo;
 
     SharedPtr<GlobalScope> FileScope;
+
+public:
+    DEFINE_GETTER_DECLTYPE(FileScope)
+
 };
 
+BEGIN_TO_JSON(CppSourceFile)
+TO_JSON_ARG_WITH_GETTER(FileScope)
+END_TO_JSON()
 
-template<>
-nlohmann::json ToJson<CppSourceFile>(const CppSourceFile& Obj)
-{
-    nlohmann::json Result;
-    auto FileScope = Obj.GetFileScope();
-
-	Result[std::string(GlobalScope::StaticClass()->Name())] = ToJson(*FileScope);
-
-    return Result;
-}

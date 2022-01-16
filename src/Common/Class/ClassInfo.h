@@ -37,8 +37,8 @@ public:\
 	typedef void Super; \
 	static std::string StaticClassName() { return #className;}\
 	static const Class* StaticClass() { return &selfClass; }\
-	virtual const Class* GetClass() { return className::StaticClass(); }\
-	virtual std::string ClassName() { return #className; }\
+	virtual const Class* GetClass() const { return className::StaticClass(); }\
+	virtual std::string ClassName() const { return #className; }\
 private:\
 	static Class selfClass;
 
@@ -74,8 +74,8 @@ public:\
 	typedef baseClassName Super; \
 	static std::string StaticClassName() { return #className;} \
 	static const Class* StaticClass() { return &selfClass; } \
-	virtual const Class* GetClass() override { return className::StaticClass(); } \
-	virtual std::string ClassName() override { return #className; } \
+	virtual const Class* GetClass() const override { return className::StaticClass(); } \
+	virtual std::string ClassName() const override { return #className; } \
 private:\
 	static Class selfClass;
 
@@ -128,3 +128,13 @@ public:\
 #define DEFINE_GETTER_SETTER(typeName, varName) \
 	DEFINE_GETTER(typeName, varName) \
 	DEFINE_SETTER(typeName, varName)
+
+#define DEFINE_GETTER_DECLTYPE(varName) \
+	auto get_##varName() const -> const decltype(varName)& { return varName; }
+
+#define DEFINE_SETTER_DECLTYPE(varName) \
+	void set_##varName(const decltype(this->varName)& varName) { this->varName = varName; }
+
+#define DEFINE_GETTER_SETTER_DECLTYPE(typeName, varName) \
+	DEFINE_GETTER_DECLTYPE(typeName, varName) \
+	DEFINE_SETTER_DECLTYPE(typeName, varName)

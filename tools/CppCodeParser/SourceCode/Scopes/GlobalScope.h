@@ -1,10 +1,11 @@
 #pragma once
 #include "BaseScope.h"
-#include "Json/JsonSerialization.h"
+#include "Json/ToJsonDefine.h"
 
 class GlobalScope : public BaseScope
 {
 	DEFINE_DERIVED_CLASS(GlobalScope, BaseScope)
+	DEFINE_TO_JSON_MEMBER()
 public:
 
 	explicit GlobalScope(const AString& InName = "Global")
@@ -32,11 +33,3 @@ private:
 	Vector<SharedPtr<EnumGenerateInfo>> GlobalEnumTypes;
 };
 
-BEGIN_TO_JSON(GlobalScope)
-BASE_TO_JSON(BaseScope)
-TO_JSON_ARG_WITH_GETTER(Namespaces)
-TO_JSON_ARG_WITH_GETTER(GlobalClasses)
-TO_JSON_ARG_WITH_GETTER(GlobalFields)
-TO_JSON_ARG_WITH_GETTER(GlobalMethods)
-TO_JSON_ARG_WITH_GETTER(GlobalEnumTypes)
-END_TO_JSON()

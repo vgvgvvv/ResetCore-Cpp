@@ -139,7 +139,7 @@ bool CppFileParser::CompileClassDeclaration(CppSourceFile& File, SharedPtr<CppTo
 	auto CurrentClassScope = std::make_shared<ClassScope>(ClassName);
 
 	auto ClassInfo = std::make_shared<ClassGenerateInfo>();
-	ClassInfo->ClassName = ClassName;
+	ClassInfo->GenerateClassName = ClassName;
 	ClassInfo->Scope = CurrentClassScope;
 
 	File.NestInfo.GetCurrentScope()->AddClass(ClassInfo);

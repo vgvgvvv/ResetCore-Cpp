@@ -3,13 +3,9 @@
 #include "CommonHeader.h"
 #include "CppCodeParser_API.h"
 #include "nlohmann/json.hpp"
-#include "Json/JsonSerialization.h"
+#include "Json/ToJsonDefine.h"
 #include "Scopes/GlobalScope.h"
 
-
-enum class ScopeType;
-class BaseScope;
-class GlobalScope;
 
 class NestInfo
 {
@@ -26,11 +22,14 @@ public:
 
 class CppCodeParser_API CppSourceFile
 {
+    DEFINE_CLASS(CppSourceFile)
+    DEFINE_TO_JSON_MEMBER()
 public:
-    CppSourceFile(const AString& InFilePath)
+    CppSourceFile(const AString& InFilePath = "")
         : FilePath(InFilePath)
 		, Content()
     {
+        assert(InFilePath == "");
         FileScope = Parse();
     }
 
@@ -48,7 +47,5 @@ public:
 
 };
 
-BEGIN_TO_JSON(CppSourceFile)
-TO_JSON_ARG_WITH_GETTER(FileScope)
-END_TO_JSON()
+
 

@@ -4,15 +4,29 @@
 #include "ResetCore_Serialization_API.h"
 
 template<typename T>
-AString ToString(const T& Obj)
+struct ToStringWrapper
 {
-	static_assert(false, "Not Support Current Type!!");
-}
+	static AString ToString(const T& Obj)
+	{
+		static_assert(false, "Not Support Current Type!!");
+		return "";
+	}
+};
+
 
 template<>
-AString ToString<AString>(const AString& Obj)
+struct ToStringWrapper<AString>
 {
-    return Obj;
+	static AString ToString(const AString& Obj)
+	{
+		return Obj;
+	}
+};
+
+template<typename T>
+AString ToString(const T& Obj)
+{
+	return ToStringWrapper<T>::ToString(Obj);
 }
 
 class ResetCore_Serialization_API StringSerialization

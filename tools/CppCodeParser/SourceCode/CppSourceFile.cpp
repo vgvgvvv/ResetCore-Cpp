@@ -3,11 +3,8 @@
 #include "FrontEnd/CppSourceParser.h"
 #include "FrontEnd/HeaderParser.h"
 #include "Scopes/BaseScope.h"
-#include "Scopes/ClassScope.h"
-#include "Scopes/EnumScope.h"
-#include "Scopes/FunctionScope.h"
 #include "Scopes/GlobalScope.h"
-#include "Scopes/NamespaceScope.h"
+#include "Json/JsonSerialization.h"
 
 SharedPtr<BaseScope> NestInfo::GetCurrentScope()
 {
@@ -35,6 +32,12 @@ SharedPtr<BaseScope> NestInfo::PopScope()
 	}
 	return Scope;
 }
+
+DEFINE_CLASS_IMP(CppSourceFile)
+BEGIN_TO_JSON(CppSourceFile)
+TO_JSON_ARG_WITH_GETTER(FileScope)
+END_TO_JSON()
+DEFINE_TO_JSON_MEMBER_IMP(CppSourceFile)
 
 SharedPtr<GlobalScope> CppSourceFile::Parse()
 {

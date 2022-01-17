@@ -6,8 +6,9 @@
 class ClassScope : public BaseScope
 {
 	DEFINE_DERIVED_CLASS(ClassScope, BaseScope)
-
+	DEFINE_TO_JSON_MEMBER()
 public:
+
 	explicit ClassScope(const AString& InName = "")
 		: BaseScope(InName)
 	{
@@ -35,10 +36,3 @@ private:
 	MemberAccessType CurrentMemberAccessType = MemberAccessType::Private;
 };
 
-BEGIN_TO_JSON(ClassScope)
-BASE_TO_JSON(BaseScope)
-TO_JSON_ARG_WITH_GETTER(InternalClasses)
-TO_JSON_ARG_WITH_GETTER(MemberFields)
-TO_JSON_ARG_WITH_GETTER(MemberMehtods)
-TO_JSON_ARG_WITH_GETTER(InternalEnumTypes)
-END_TO_JSON()

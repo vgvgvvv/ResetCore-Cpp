@@ -5,12 +5,40 @@
 #include "String/StringSerialization.h"
 #include "ResetCore_Serialization_API.h"
 
-template<typename T>
+namespace __TO_JSON_DETAIL
+{
+    // SFINAE test
+    template <typename T>
+    class HasToJson
+    {
+        typedef char one;
+        struct two { char x[2]; };
+
+        template <typename C>
+        static one test(decltype(&C::ToJson));
+        template <typename C>
+        static two test(...);
+
+    public:
+        enum { Value = sizeof(test<T>(0)) == sizeof(char) };
+    };
+}
+
+template<typename T, typename = void>
 struct ToJsonWrapper
 {
     static nlohmann::json ToJson(const T& Obj)
     {
         return Obj;
+    }
+};
+
+template<typename T>
+struct ToJsonWrapper<T, typename std::enable_if_t<__TO_JSON_DETAIL::HasToJson<T>::Value>>
+{
+    static nlohmann::json ToJson(const T& Obj)
+    {
+        return Obj.ToJson();
     }
 };
 
@@ -66,7 +94,8 @@ struct ToJsonWrapper<std::shared_ptr<T>>
 {
     static nlohmann::json ToJson(const std::shared_ptr<T>& Obj)
     {
-        return ToJsonWrapper<T>::ToJson(*Obj);
+        T& Out = *Obj;
+        return ToJsonWrapper<T>::ToJson(Out);
     }
 };
 
@@ -85,26 +114,3 @@ class ResetCore_Serialization_API JsonSerialization
 	}
 };
 
-#define BEGIN_TO_JSON(ClassName) \
-template<> \
-struct ToJsonWrapper<ClassName> \
-{ \
-    static nlohmann::json ToJson(const ClassName& Obj) \
-    { \
-        nlohmann::json Result;
-
-#define BASE_TO_JSON(BaseClassName)\
-static_assert(std::is_base_of_v<BaseClassName, std::decay_t<decltype(Obj)>>, "Must Derived From " #BaseClassName); \
-Result = ToJsonWrapper<BaseClassName>::ToJson(Obj);
-
-
-#define TO_JSON_ARG(ArgName) \
-Result[#ArgName] = ToJsonWrapper<decltype(Obj.ArgName)>::ToJson(Obj.ArgName);
-
-#define TO_JSON_ARG_WITH_GETTER(ArgName) \
-Result[#ArgName] = ToJsonWrapper<decltype(Obj.get_##ArgName())>::ToJson(Obj.get_##ArgName());
-
-#define END_TO_JSON() \
-		return Result; \
-	} \
-};

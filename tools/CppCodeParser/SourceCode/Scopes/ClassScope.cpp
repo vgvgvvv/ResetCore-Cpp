@@ -2,9 +2,18 @@
 
 #include "FrontEnd/CppFileParser.h"
 #include "FrontEnd/Token.h"
+#include "Json/JsonSerialization.h"
 
 
 DEFINE_DERIVED_CLASS_IMP(ClassScope, BaseScope)
+BEGIN_TO_JSON(ClassScope)
+BASE_TO_JSON(BaseScope)
+TO_JSON_ARG_WITH_GETTER(InternalClasses)
+TO_JSON_ARG_WITH_GETTER(MemberFields)
+TO_JSON_ARG_WITH_GETTER(MemberMehtods)
+TO_JSON_ARG_WITH_GETTER(InternalEnumTypes)
+END_TO_JSON()
+DEFINE_TO_JSON_MEMBER_IMP(ClassScope)
 
 void ClassScope::AddClass(SharedPtr<ClassGenerateInfo> InClass)
 {

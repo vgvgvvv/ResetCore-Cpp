@@ -6,6 +6,7 @@
 class FunctionScope : public BaseScope
 {
 	DEFINE_DERIVED_CLASS(FunctionScope, BaseScope)
+	DEFINE_TO_JSON_MEMBER()
 public:
 	explicit FunctionScope(const AString& InName = "")
 		: BaseScope(InName)
@@ -14,6 +15,3 @@ public:
 	
 };
 
-BEGIN_TO_JSON(FunctionScope)
-BASE_TO_JSON(BaseScope)
-END_TO_JSON()

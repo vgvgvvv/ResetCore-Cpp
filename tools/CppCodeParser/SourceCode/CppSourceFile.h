@@ -25,11 +25,10 @@ class CppCodeParser_API CppSourceFile
     DEFINE_CLASS(CppSourceFile)
     DEFINE_TO_JSON_MEMBER()
 public:
-    CppSourceFile(const AString& InFilePath = "")
+    CppSourceFile(const AString& InFilePath)
         : FilePath(InFilePath)
 		, Content()
     {
-        assert(InFilePath == "");
         FileScope = Parse();
     }
 

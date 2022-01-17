@@ -10,5 +10,9 @@ int main()
 	RE_LOG_INFO("Main", "Parse File : {}", TestFileName)
 	CppSourceFile File(TestFileName);
 
+	auto Json = File.ToJson();
+	
+	RE_LOG_INFO("Main", "{}", nlohmann::to_string(Json).c_str())
+
 	return 0;
 }

@@ -11,15 +11,15 @@ struct ToJsonWrapper<ClassName> \
         nlohmann::json Result;
 
 #define BASE_TO_JSON(BaseClassName)\
-static_assert(std::is_base_of_v<BaseClassName, std::decay_t<decltype(Obj)>>, "Must Derived From " #BaseClassName); \
-Result = ToJsonWrapper<BaseClassName>::ToJson(Obj);
+static_assert(std::is_base_of_v<BaseClassName, std::decay_t<decltype(*this)>>, "Must Derived From " #BaseClassName); \
+Result = ToJsonWrapper<BaseClassName>::ToJson(*this);
 
 
 #define TO_JSON_ARG(ArgName) \
-Result[#ArgName] = ToJsonWrapper<decltype(Obj.ArgName)>::ToJson(Obj.ArgName);
+Result[#ArgName] = ToJsonWrapper<decltype(ArgName)>::ToJson(ArgName);
 
 #define TO_JSON_ARG_WITH_GETTER(ArgName) \
-Result[#ArgName] = ToJsonWrapper<decltype(Obj.get_##ArgName())>::ToJson(Obj.get_##ArgName());
+Result[#ArgName] = ToJsonWrapper<decltype(get_##ArgName())>::ToJson(get_##ArgName());
 
 #define END_TO_JSON() \
 		return Result; \
@@ -31,8 +31,11 @@ public: \
 nlohmann::json ToJson() const; \
 private:
 
-#define DEFINE_TO_JSON_MEMBER_IMP(ClassName) \
+#define BEGIN_TO_JSON_MEMBER_IMP(ClassName) \
 nlohmann::json ClassName::ToJson() const \
 { \
-    return ToJsonWrapper<ClassName>::ToJson(*this); \
-}
+	nlohmann::json Result;
+
+#define END_TO_JSON_MEMBER_IMP() \
+	return Result; \
+};

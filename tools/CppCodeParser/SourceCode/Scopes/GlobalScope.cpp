@@ -2,15 +2,14 @@
 #include "Json/JsonSerialization.h"
 
 DEFINE_DERIVED_CLASS_IMP(GlobalScope, BaseScope)
-BEGIN_TO_JSON(GlobalScope)
+BEGIN_TO_JSON_MEMBER_IMP(GlobalScope)
 BASE_TO_JSON(BaseScope)
 TO_JSON_ARG_WITH_GETTER(Namespaces)
 TO_JSON_ARG_WITH_GETTER(GlobalClasses)
 TO_JSON_ARG_WITH_GETTER(GlobalFields)
 TO_JSON_ARG_WITH_GETTER(GlobalMethods)
 TO_JSON_ARG_WITH_GETTER(GlobalEnumTypes)
-END_TO_JSON()
-DEFINE_TO_JSON_MEMBER_IMP(GlobalScope)
+END_TO_JSON_MEMBER_IMP()
 
 void GlobalScope::AddNamespace(SharedPtr<NamespaceGenerateInfo> InSpaceName)
 {

@@ -33,11 +33,12 @@ SharedPtr<BaseScope> NestInfo::PopScope()
 	return Scope;
 }
 
-DEFINE_CLASS_IMP(CppSourceFile)
-BEGIN_TO_JSON(CppSourceFile)
+DEFINE_CLASS_IMP_BEGIN(CppSourceFile, ClassFlag::None)
+DEFINE_CLASS_IMP_END()
+
+BEGIN_TO_JSON_MEMBER_IMP(CppSourceFile)
 TO_JSON_ARG_WITH_GETTER(FileScope)
-END_TO_JSON()
-DEFINE_TO_JSON_MEMBER_IMP(CppSourceFile)
+END_TO_JSON_MEMBER_IMP()
 
 SharedPtr<GlobalScope> CppSourceFile::Parse()
 {

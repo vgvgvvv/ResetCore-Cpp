@@ -8,7 +8,7 @@ class EnumScope : public BaseScope
 	DEFINE_DERIVED_CLASS(EnumScope, BaseScope)
 	DEFINE_TO_JSON_MEMBER()
 public:
-	explicit EnumScope(const AString& InName = "")
+	EnumScope(const AString& InName = "")
 		: BaseScope(InName)
 	{
 	}

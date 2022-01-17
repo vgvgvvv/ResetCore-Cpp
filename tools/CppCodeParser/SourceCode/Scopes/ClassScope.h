@@ -9,7 +9,7 @@ class ClassScope : public BaseScope
 	DEFINE_TO_JSON_MEMBER()
 public:
 
-	explicit ClassScope(const AString& InName = "")
+	ClassScope(const AString& InName = "")
 		: BaseScope(InName)
 	{
 	}

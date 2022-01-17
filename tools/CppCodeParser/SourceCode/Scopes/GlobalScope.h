@@ -8,7 +8,7 @@ class GlobalScope : public BaseScope
 	DEFINE_TO_JSON_MEMBER()
 public:
 
-	explicit GlobalScope(const AString& InName = "Global")
+	GlobalScope(const AString& InName = "Global")
 		: BaseScope(InName)
 	{
 	}

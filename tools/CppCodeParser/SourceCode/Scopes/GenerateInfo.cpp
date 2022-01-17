@@ -1,4 +1,5 @@
 #include "GenerateInfos.h"
+#include "NamespaceScope.h"
 #include "ClassScope.h"
 #include "EnumScope.h"
 #include "FunctionScope.h"
@@ -56,6 +57,7 @@ END_TO_JSON_MEMBER_IMP()
 DEFINE_CLASS_IMP(NamespaceGenerateInfo)
 BEGIN_TO_JSON_MEMBER_IMP(NamespaceGenerateInfo)
 TO_JSON_ARG(NamespaceName)
+TO_JSON_ARG(Scope)
 END_TO_JSON_MEMBER_IMP()
 
 DEFINE_CLASS_IMP(FieldGenerateInfo)

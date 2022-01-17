@@ -7,12 +7,12 @@ class NamespaceScope : public BaseScope
 	DEFINE_DERIVED_CLASS(NamespaceScope, BaseScope)
 	DEFINE_TO_JSON_MEMBER()
 public:
-	explicit NamespaceScope(const AString& InName = "")
+	NamespaceScope(const AString& InName = "")
 		: BaseScope(InName)
 	{
 	}
 
-	void AddNamespace(SharedPtr<NamespaceGenerateInfo> InNamespace) override;
+	void AddNamespace(SharedPtr<NamespaceGenerateInfo> InSpaceName) override;
 	void AddClass(SharedPtr<ClassGenerateInfo> InClass) override;
 	void AddMethod(SharedPtr<FunctionGenerateInfo> InMethodInfo) override;
 	void AddField(SharedPtr<FieldGenerateInfo> InFieldInfo) override;

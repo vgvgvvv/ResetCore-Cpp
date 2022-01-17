@@ -84,8 +84,8 @@ bool CppFileParser::CompileDeclaration(CppSourceFile& File, SharedPtr<CppToken> 
 
 bool CppFileParser::CompileNamespaceDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token)
 {
-	auto NamespaceName = GetToken();
-	RE_ASSERT_MSG(NamespaceName != nullptr, "Exit Early!");
+	auto NamespaceNameToken = GetToken();
+	RE_ASSERT_MSG(NamespaceNameToken != nullptr, "Exit Early!");
 	auto FrontBacket = GetToken();
 	RE_ASSERT_MSG(FrontBacket != nullptr, "Exit Early!");
 	if(!FrontBacket->Matches('{'))
@@ -93,9 +93,20 @@ bool CppFileParser::CompileNamespaceDeclaration(CppSourceFile& File, SharedPtr<C
 		return false;
 	}
 
-	auto NameSpaceScope = std::make_shared<NamespaceScope>(NamespaceName->GetTokenName());
+	auto NamespaceName = NamespaceNameToken->GetTokenName();
 
-	File.NestInfo.PushScope(NameSpaceScope);
+	auto CurrentScope = File.NestInfo.GetCurrentScope();
+
+	SharedPtr<NamespaceScope> CurrentNamespaceScope = 
+		std::make_shared<NamespaceScope>(NamespaceName);
+
+	SharedPtr<NamespaceGenerateInfo> NamespaceInfo = std::make_shared<NamespaceGenerateInfo>();
+	NamespaceInfo->NamespaceName = NamespaceName;
+	NamespaceInfo->Scope = CurrentNamespaceScope;
+
+	CurrentScope->AddNamespace(NamespaceInfo);
+
+	File.NestInfo.PushScope(CurrentNamespaceScope);
 
 	return true;
 }

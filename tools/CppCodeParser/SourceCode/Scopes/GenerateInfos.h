@@ -89,6 +89,7 @@ struct NamespaceGenerateInfo
 public:
 
 	AString NamespaceName;
+	SharedPtr<class NamespaceScope> Scope;
 };
 
 struct FieldGenerateInfo

@@ -11,8 +11,8 @@ int main()
 	CppSourceFile File(TestFileName);
 
 	auto Json = File.ToJson();
-	
-	RE_LOG_INFO("Main", "{}", nlohmann::to_string(Json).c_str())
+
+	RE_LOG_INFO("Main", "{}", Json.dump(4).c_str())
 
 	return 0;
 }

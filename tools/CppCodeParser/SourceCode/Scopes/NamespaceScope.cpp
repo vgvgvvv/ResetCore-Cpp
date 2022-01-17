@@ -11,9 +11,10 @@ TO_JSON_ARG_WITH_GETTER(GlobalMethods)
 TO_JSON_ARG_WITH_GETTER(GlobalEnumTypes)
 END_TO_JSON_MEMBER_IMP()
 
-void NamespaceScope::AddNamespace(SharedPtr<NamespaceGenerateInfo> InNamespace)
+
+void NamespaceScope::AddNamespace(SharedPtr<NamespaceGenerateInfo> InSpaceName)
 {
-	Namespaces.push_back(InNamespace);
+	Namespaces.push_back(InSpaceName);
 }
 
 void NamespaceScope::AddClass(SharedPtr<ClassGenerateInfo> InClass)

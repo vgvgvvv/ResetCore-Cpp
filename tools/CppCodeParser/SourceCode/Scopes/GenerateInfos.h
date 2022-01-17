@@ -19,6 +19,7 @@ struct ClassGenerateInfo
 public:
 
 	AString GenerateClassName;
+	AttributeInfo AttrInfo;
 	SharedPtr<class ClassScope> Scope;
 };
 

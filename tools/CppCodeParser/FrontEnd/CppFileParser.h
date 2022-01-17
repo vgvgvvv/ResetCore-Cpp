@@ -35,6 +35,8 @@ private:
 
 	bool CompileFieldMarkDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token);
 
+	bool CompileAttributeDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token);
+
 	void PrintDebugInfo(const AString& Info);
 };
 

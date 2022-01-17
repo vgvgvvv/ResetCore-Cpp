@@ -480,6 +480,12 @@ bool CppFileParser::CompileFieldMarkDeclaration(CppSourceFile& File, SharedPtr<C
 	return true;
 }
 
+bool CppFileParser::CompileAttributeDeclaration(CppSourceFile& File, SharedPtr<CppToken> Token)
+{
+	// TODO
+	return true;
+}
+
 void CppFileParser::PrintDebugInfo(const AString& Info)
 {
 	if(GlobalContext::Get().GetBoolValue("DebugCppFileParser"))

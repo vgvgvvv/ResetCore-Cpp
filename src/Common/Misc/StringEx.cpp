@@ -13,16 +13,6 @@ void StringEx::ReplaceAll(std::string& str, const std::string& from, const std::
     }
 }
 
-std::string StringEx::WStringToString(const std::wstring& str)
-{
-    return std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(str);
-}
-
-std::wstring StringEx::StringToWString(const std::string& str)
-{
-    return std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(str);
-}
-
 std::vector<std::string> StringEx::Split(const std::string& str, const std::string& delimiter)
 {
     std::vector<std::string> result;

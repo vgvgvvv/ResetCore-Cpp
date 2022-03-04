@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <cstring>
 #include "Platform/Platform.h"
 #include "ResetCore_CommonLib_API.h"
 

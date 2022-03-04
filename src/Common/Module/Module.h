@@ -6,7 +6,9 @@
 
 namespace CommonLib
 {
+#if defined(PLATFORM_WINDOWS)
     // Forward declarations
     ResetCore_CommonLib_API void* LoadModuleLibrary(const T_CHAR*);
-    ResetCore_CommonLib_API void* GetModuleExport(void*, const char*);
+    ResetCore_CommonLib_API FARPROC GetModuleExport(void*, const char*);
+#endif
 }

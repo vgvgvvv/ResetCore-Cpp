@@ -11,9 +11,9 @@ void* CommonLib::LoadModuleLibrary(const T_CHAR* path)
     RE_ASSERT(h != nullptr);
     return (void*)h;
 }
-void* CommonLib::GetModuleExport(void* h, const char* name)
+FARPROC CommonLib::GetModuleExport(void* h, const char* name)
 {
-    void* f = GetProcAddress((HMODULE)h, name);
+    FARPROC f = GetProcAddress((HMODULE)h, name);
     RE_ASSERT(f != nullptr);
     return f;
 }

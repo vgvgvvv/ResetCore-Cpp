@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <cstring>
 
 #include "ResetCore_CommonLib_API.h"
 #include "Platform/Platform.h"
@@ -9,10 +10,6 @@ class ResetCore_CommonLib_API StringEx
 {
 public:
 	static void ReplaceAll(std::string& str, const std::string& from, const std::string& to);
-
-	static std::string WStringToString(const std::wstring& str);
-
-	static std::wstring StringToWString(const std::string& str);
 
 	static std::vector<std::string> Split(const std::string& str, const std::string& split);
 

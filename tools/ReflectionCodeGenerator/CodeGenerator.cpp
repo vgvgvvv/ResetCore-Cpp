@@ -1,6 +1,9 @@
 #include "CodeGenerator.h"
 
-class CodeGenerator
+#include "CommonHeader.h"
+
+class ICodeGenerator
 {
-	
+public:
+	void ExportFile(const AString& SourceFileName, const AString& GeneratedFileName);
 };

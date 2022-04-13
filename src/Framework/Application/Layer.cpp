@@ -3,7 +3,7 @@
 DEFINE_CLASS_IMP_BEGIN(Layer, ClassFlag::Abstruct)
 DEFINE_CLASS_IMP_END()
 
-void LayerManager::PushLayer(Layer* layer)
+void LayerManager::PushLayer(std::shared_ptr<Layer> layer)
 {
 	layer->OnInit();
 	Layers.push_back(layer);

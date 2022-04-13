@@ -26,7 +26,7 @@ class ResetCore_Framework_API LayerManager
 {
 public:
 
-	void PushLayer(Layer* layer);
+	void PushLayer(std::shared_ptr<Layer> layer);
 
 	void PreUpdate(float deltaTime);
 	void Update(float deltaTime);
@@ -44,7 +44,7 @@ public:
 	T* GetLayer();
 	
 private:
-	std::vector<Layer*> Layers;
+	std::vector<std::shared_ptr<Layer>> Layers;
 };
 
 template <typename T>

@@ -1,3 +1,6 @@
+
+if (IS_WINDOWS EQUAL 1)
+
 set(targetName D3D11RHI)
 ReMake_AddTarget(
         TARGET_NAME ${targetName}
@@ -8,3 +11,5 @@ ReMake_AddTarget(
 ReMake_StartUse()
 UseDirectX11(${targetName})
 ReMake_EndUse()
+
+endif()
